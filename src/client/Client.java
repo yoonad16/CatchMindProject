@@ -6,16 +6,23 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class Client {
  private Socket socket;
- private BufferedReader in;
+ private Scanner in;
  private PrintWriter out;
 
- public void connect(String ip, int port) throws UnknownHostException, IOException {
-     socket = new Socket(ip, port);
-     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-     out = new PrintWriter(socket.getOutputStream());
+ //IP주소랑 포트번호 입력해야함 (나중에 View에서 입력받아도 좋을듯)
+ public void connect(String ip, int port){
+     try {
+         socket = new Socket(ip, port);
+         in = new Scanner(socket.getInputStream());
+         out = new PrintWriter(socket.getOutputStream());
+     } catch (IOException e) {
+         e.printStackTrace();
+     }
+
  }
 
  public void send(String msg) {
@@ -24,16 +31,16 @@ public class Client {
  }
 
  public void listen() {
-     new Thread(() -> {
-         String msg;
-         try {
-			while ((msg = in.readLine()) != null) {
-			     System.out.println("서버 메시지: " + msg);
-			 }
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-     }).start();
+     Thread listen = new Thread(new Runnable() {
+         @Override
+         public void run() {
+             String msg;
+             while (in.hasNext()) {
+                 msg = in.nextLine();
+                 System.out.println(msg);
+             }
+         }
+     });
+     listen.start();
  }
 }
