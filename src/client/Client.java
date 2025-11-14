@@ -1,5 +1,6 @@
 package client;
 
+import javax.swing.text.View;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,6 +13,7 @@ public class Client {
  private Socket socket;
  private Scanner in;
  private PrintWriter out;
+ private ViewController viewController;
 
  //IP주소랑 포트번호 입력해야함 (나중에 View에서 입력받아도 좋을듯)
  public void connect(String ip, int port){
@@ -38,9 +40,14 @@ public class Client {
              while (in.hasNext()) {
                  msg = in.nextLine();
                  System.out.println(msg);
+                 viewController.updateChatPanel(msg);
              }
          }
      });
      listen.start();
+ }
+
+ public void setViewController(ViewController viewController) {
+     this.viewController = viewController;
  }
 }

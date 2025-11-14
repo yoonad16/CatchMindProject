@@ -27,6 +27,7 @@ public class ClientHandler extends Thread {
         String msg;
         while (in.hasNext()) {
             msg = in.nextLine();
+            msg = "["+socket.getInetAddress().getHostAddress()+"]: "+msg;
             server.broadcast(msg);
         }
     }
