@@ -1,17 +1,16 @@
 package client;
 
 import javax.swing.text.View;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.awt.*;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Client {
  private Socket socket;
- private Scanner in;
+ private BufferedReader in;
  private PrintWriter out;
  private ViewController viewController;
 
@@ -19,8 +18,10 @@ public class Client {
  public void connect(String ip, int port){
      try {
          socket = new Socket(ip, port);
-         in = new Scanner(socket.getInputStream());
-         out = new PrintWriter(socket.getOutputStream());
+         InputStreamReader input = new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8);
+         in = new BufferedReader(input);
+         OutputStreamWriter output = new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8);
+         out = new PrintWriter(output, true);
      } catch (IOException e) {
          e.printStackTrace();
      }
@@ -32,15 +33,37 @@ public class Client {
      out.flush();
  }
 
+ public void sendDrawing(Point from, Point to) {
+     String msg = String.format("$%d:%d:%d:%d", from.x, from.y, to.x, to.y);
+     out.println(msg);
+ }
+
  public void listen() {
      Thread listen = new Thread(new Runnable() {
          @Override
          public void run() {
              String msg;
-             while (in.hasNext()) {
-                 msg = in.nextLine();
-                 System.out.println(msg);
-                 viewController.updateChatPanel(msg);
+             while (true) {
+                 try {
+                     if ((msg = in.readLine()) != null){
+                         if(msg.charAt(0) == '$'){
+                             System.out.println("캔버스 받음");
+
+                             msg = msg.substring(1);
+                             System.out.println(msg);
+
+                             String[] points = msg.split(":");
+                             Point from = new Point(Integer.parseInt(points[0]),Integer.parseInt(points[1]));
+                             Point to = new Point(Integer.parseInt(points[2]),Integer.parseInt(points[3]));
+                             viewController.updateCanvasPanel(from, to);
+                         }
+                         else {
+                             viewController.updateChatPanel(msg);
+                         }
+                     }
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
              }
          }
      });

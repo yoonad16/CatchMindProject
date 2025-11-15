@@ -9,25 +9,34 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class ChatPanel extends JFrame {
+public class ChatPanel extends JPanel{
 
     public JTextArea textArea;
     public JTextField inputText;
 
     private ViewController viewController;
 
-    public static void main(String[] args) {
-        new ChatPanel();
-    }
     public ChatPanel() {
-        setSize(800,500);
+        setSize(300,500);
+        setBackground(Color.BLACK);
         setLayout(new BorderLayout());
 
         textArea = new JTextArea();
+        textArea.setEditable(false);
+
+        textArea.setBackground(Color.BLACK);
+        textArea.setForeground(Color.WHITE);
+
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+
+        JScrollPane scrollBar = new JScrollPane(textArea);
+        scrollBar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
         inputText = new JTextField();
 
 
-        add(textArea, BorderLayout.NORTH);
+        add(scrollBar, BorderLayout.CENTER);
         add(inputText, BorderLayout.SOUTH);
 
         inputText.addKeyListener(new KeyListener() {
@@ -41,6 +50,7 @@ public class ChatPanel extends JFrame {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER){
                     String msg = inputText.getText();
                     viewController.sendChat(msg);
+                    System.out.println("여기 실행됨");
                 }
             }
 
@@ -58,9 +68,6 @@ public class ChatPanel extends JFrame {
 
     public void updateTextArea(String msg) {
         this.textArea.append(msg+"\n");
-//       SwingUtilities.invokeLater(()->{
-//           this.textArea.append(msg+"\n");
-//       });
     }
 
     public void setViewController (ViewController viewController) {
