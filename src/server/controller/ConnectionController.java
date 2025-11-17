@@ -1,21 +1,23 @@
 package server.controller;
 
 import server.Server;
+import server.domain.Player;
 
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 //컨트롤러: 통신/송수신 담당
-public class ClientController extends Thread {
+public class ConnectionController extends Thread {
     public Socket socket;
     private Server server;
     private BufferedReader in;
     private PrintWriter out;
     private GameRoom gameRoom;
     private String name;
+    private Player player;
 
-    public ClientController(Socket socket, Server server) {
+    public ConnectionController(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
         try {
@@ -50,11 +52,11 @@ public class ClientController extends Thread {
         this.gameRoom = gameRoom;
     }
 
-    public void setPlayerName(String name) {
-        this.name = name;
-    }
-
     public String getPlayerName(){
         return this.name;
     }
+
+    public Player getPlayer() {return player;}
+
+    public void setPlayer(Player player) {this.player = player;}
 }

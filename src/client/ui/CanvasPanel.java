@@ -1,6 +1,6 @@
 package client.ui;
 
-import client.ViewController;
+import client.controller.ViewController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +37,7 @@ public class CanvasPanel extends JPanel {
     }
 
     public void sendCanvas (Point from, Point to) {
-        viewController.sendCanvas(from,to);
+        viewController.sendDrawing(from,to);
     }
 
     public void setViewController(ViewController viewController) {

@@ -1,5 +1,5 @@
 package server.service;
 
-public class ChatManager {
+public class GameService {
 
 }

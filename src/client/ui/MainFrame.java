@@ -1,6 +1,6 @@
 package client.ui;
 
-import client.ViewController;
+import client.controller.ViewController;
 
 import javax.swing.*;
 import java.awt.*;

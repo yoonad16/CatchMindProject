@@ -1,18 +1,19 @@
 package client;
 
-import javax.swing.text.View;
+import client.controller.ViewController;
+
 import java.awt.*;
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 
+//실제 통신 담당(서버로 메시지 보내고, 받는 역할)
 public class Client {
  private Socket socket;
  private BufferedReader in;
  private PrintWriter out;
  private ViewController viewController;
+
 
  //IP주소랑 포트번호 입력해야함 (나중에 View에서 입력받아도 좋을듯)
  public void connect(String ip, int port){
@@ -25,7 +26,6 @@ public class Client {
      } catch (IOException e) {
          e.printStackTrace();
      }
-
  }
 
  public void send(String msg) {
@@ -34,43 +34,38 @@ public class Client {
  }
 
  public void sendDrawing(Point from, Point to) {
-     String msg = String.format("$%d:%d:%d:%d", from.x, from.y, to.x, to.y);
+     String msg = String.format("DRAW:%d:%d:%d:%d", from.x, from.y, to.x, to.y);
      out.println(msg);
  }
 
  public void listen() {
-     Thread listen = new Thread(new Runnable() {
-         @Override
-         public void run() {
-             String msg;
-             while (true) {
-                 try {
-                     if ((msg = in.readLine()) != null){
-                         if(msg.charAt(0) == '$'){
-                             System.out.println("캔버스 받음");
+     Thread listen = new Thread(() -> {
+         String msg;
+         while (true) {
+             try {
+                 if ((msg = in.readLine()) != null){
 
-                             msg = msg.substring(1);
-                             System.out.println(msg);
-
-                             String[] points = msg.split(":");
-                             Point from = new Point(Integer.parseInt(points[0]),Integer.parseInt(points[1]));
-                             Point to = new Point(Integer.parseInt(points[2]),Integer.parseInt(points[3]));
-                             viewController.updateCanvasPanel(from, to);
-                         }
-                         else {
-                             viewController.updateChatPanel(msg);
-                         }
+                     if(msg.startsWith("DRAW")){
+                         String[] points = msg.split(":");
+                         Point from = new Point(Integer.parseInt(points[1]),Integer.parseInt(points[2]));
+                         Point to = new Point(Integer.parseInt(points[3]),Integer.parseInt(points[4]));
+                         viewController.updateCanvasPanel(from, to);
                      }
-                 } catch (IOException e) {
-                     e.printStackTrace();
+                     else {
+                         viewController.updateChatPanel(msg);
+                     }
                  }
+             } catch (IOException e) {
+                 e.printStackTrace();
              }
          }
      });
+
      listen.start();
  }
 
  public void setViewController(ViewController viewController) {
      this.viewController = viewController;
  }
+
 }
