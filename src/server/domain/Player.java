@@ -1,9 +1,14 @@
 package server.domain;
 
+import server.MessageSender;
+import server.controller.ConnectionController;
+
 public class Player {
     private String name;
    private  String id;
     private String password;
+    private ConnectionController connectionController;
+    private MessageSender messageSender;
 
     public Player() {}
     public Player(String name, String id, String password) {
@@ -12,8 +17,12 @@ public class Player {
         this.password = password;
     }
 
+    public void sendMessage(String msg) {
+        messageSender.send(msg);
+    }
 
     //Getter & Setter
+    public void setMessageSender(ConnectionController connectionController) {this.messageSender = connectionController;}
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
     public String getId() {return id;}

@@ -23,24 +23,22 @@ public class Server extends Thread{
                 System.out.println("서버 연결 대기중 ....");
                 Socket socket = serverSocket.accept();
 
-                ConnectionController handler = new ConnectionController(socket, this);
-                handler.setGameRoom(gameRoom);
-                gameRoom.addPlayer(handler);
-                clients.add(handler);
-                handler.start();
-                System.out.println(socket.getInetAddress().getHostAddress()+"와 연결되었습니다.");
+
+
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-//
-//    public void broadcast(String msg) {
-//        for (ConnectionController c : clients) {
-//            c.send(msg);
-//        }
-//    }
+
+    public void addPlayer(Socket socket) {
+        ConnectionController handler = new ConnectionController(socket, this);
+        handler.setGameRoom(gameRoom);
+        clients.add(handler);
+        handler.start();
+        System.out.println(socket.getInetAddress().getHostAddress()+"와 연결되었습니다.");
+    }
 
     public void makeGameRoom() {
 

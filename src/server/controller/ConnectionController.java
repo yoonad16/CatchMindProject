@@ -1,5 +1,6 @@
 package server.controller;
 
+import server.MessageSender;
 import server.Server;
 import server.domain.Player;
 
@@ -8,13 +9,12 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 //컨트롤러: 통신/송수신 담당
-public class ConnectionController extends Thread {
+public class ConnectionController extends Thread implements MessageSender {
     public Socket socket;
     private Server server;
     private BufferedReader in;
     private PrintWriter out;
     private GameRoom gameRoom;
-    private String name;
     private Player player;
 
     public ConnectionController(Socket socket, Server server) {
@@ -28,6 +28,9 @@ public class ConnectionController extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        this.player = new Player();
+        gameRoom.addPlayer(player);
     }
 
     //클라이언트가 보낸게 이쪽의 in으로 들어와서, 브로드캐스트(다른 클라이언트들)한테 보내짐
@@ -35,7 +38,7 @@ public class ConnectionController extends Thread {
         String msg;
             try {
                 while ((msg=in.readLine()) != null) {
-                    gameRoom.processMessage(this, msg);
+                    gameRoom.processMessage(this.player, msg);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -50,10 +53,6 @@ public class ConnectionController extends Thread {
 
     public void setGameRoom(GameRoom gameRoom) {
         this.gameRoom = gameRoom;
-    }
-
-    public String getPlayerName(){
-        return this.name;
     }
 
     public Player getPlayer() {return player;}
