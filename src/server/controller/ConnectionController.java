@@ -1,18 +1,21 @@
-package server;
+package server.controller;
+
+import server.Server;
 
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 
-//접속하는 클라이언트마다 이 클래스 생성됨
-public class ClientHandler extends Thread {
-    private Socket socket;
+//컨트롤러: 통신/송수신 담당
+public class ClientController extends Thread {
+    public Socket socket;
     private Server server;
     private BufferedReader in;
     private PrintWriter out;
+    private GameRoom gameRoom;
+    private String name;
 
-    public ClientHandler(Socket socket, Server server) {
+    public ClientController(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
         try {
@@ -30,11 +33,7 @@ public class ClientHandler extends Thread {
         String msg;
             try {
                 while ((msg=in.readLine()) != null) {
-                    System.out.println(msg);
-                    if(msg.charAt(0) != '$'){
-                        msg = "["+socket.getInetAddress().getHostAddress()+"]: "+msg;
-                    }
-                    server.broadcast(msg);
+                    gameRoom.processMessage(this, msg);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -43,6 +42,19 @@ public class ClientHandler extends Thread {
 
     //서버의 브로드캐스트 메소드에서 이 메소드 호출돼서 각 클라이언트들한테 재전송됨
     public void send(String msg) {
+        System.out.println(msg);
         out.println(msg);
+    }
+
+    public void setGameRoom(GameRoom gameRoom) {
+        this.gameRoom = gameRoom;
+    }
+
+    public void setPlayerName(String name) {
+        this.name = name;
+    }
+
+    public String getPlayerName(){
+        return this.name;
     }
 }

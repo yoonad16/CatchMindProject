@@ -1,4 +1,4 @@
-package server;
+package server.dto;
 
 public class Player {
 
