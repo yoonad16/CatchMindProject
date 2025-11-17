@@ -1,5 +1,6 @@
 package client.ui;
 
+import client.ClientTest;
 import client.controller.ViewController;
 
 import javax.swing.*;

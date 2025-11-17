@@ -22,11 +22,12 @@ public class Server extends Thread{
     public void run() {
         makeGameRoom();
         try {
-            serverSocket = new ServerSocket(10500);
+            serverSocket = new ServerSocket(50023);
 
             while (true) {
                 System.out.println("서버 연결 대기중 ....");
                 Socket socket = serverSocket.accept();
+                System.out.println(socket.getInetAddress().getHostAddress()+"와 연결되었습니다.");
                 addPlayer(socket);
             }
         } catch (IOException e) {
@@ -42,7 +43,6 @@ public class Server extends Thread{
         handler.setGameRoom(gameRoom);
         clients.add(handler);
         handler.start();
-        System.out.println(socket.getInetAddress().getHostAddress()+"와 연결되었습니다.");
     }
 
     public void makeGameRoom() {

@@ -45,6 +45,18 @@ public class ConnectionController extends Thread implements MessageSender {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println(player.getName()+"님의 연결이 종료되었습니다.");
+            } finally {
+                if (gameRoom != null) {
+                    gameRoom.removePlayer(this.player);
+                }
+                if (socket != null) {
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
     }
 
