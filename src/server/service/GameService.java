@@ -4,13 +4,12 @@ import server.controller.GameRoom;
 import server.domain.Player;
 
 public class GameService {
-    private GameRoom gameRoom;
 
     //DRAW/NAME 아닌 메시지 처리 메소드
-    public void answerMessage (String msg, Player player) {
+    public void answerMessage (GameRoom gameRoom,String msg, Player player) {
         String message;
 
-        if (compareWord(msg)){
+        if (compareWord(gameRoom, msg)){
             message = "["+player.getName()+"]: "+msg+"\n";
             message += player.getName()+"님이 정답을 맞추셨습니다.";
 
@@ -25,7 +24,7 @@ public class GameService {
     }
 
     //NAME: 닉네임 설정하는 메시지 처리 메소드
-    public void nameMessage (String msg, Player player) {
+    public void nameMessage (GameRoom gameRoom, String msg, Player player) {
         String message;
 
         String[] tokens = msg.split(":");
@@ -36,7 +35,7 @@ public class GameService {
     }
 
     //답 맞는지 체크하는 메소드
-    public boolean compareWord (String word) {
+    public boolean compareWord (GameRoom gameRoom,String word) {
         return word.equalsIgnoreCase(gameRoom.getCurrentWord());
     }
 
@@ -58,8 +57,4 @@ public class GameService {
 
         return nextDrawer;
     }
-
-    //getter & setter
-    public GameRoom getGameRoom() {return gameRoom;}
-    public void setGameRoom(GameRoom gameRoom) {this.gameRoom = gameRoom;}
 }

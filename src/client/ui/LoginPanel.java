@@ -16,9 +16,6 @@ public class LoginPanel extends JFrame {
     private JTextField ipField;
     private ViewController viewController;
 
-    public static void main(String[] args) {
-        new LoginPanel();
-    }
     public LoginPanel() {
         setSize(800,500);
         setLayout(null);
@@ -87,11 +84,6 @@ public class LoginPanel extends JFrame {
 
     }
 
-    public void setViewController(ViewController viewController) {
-        this.viewController = viewController;
-    }
-
-    public void accessSuccess(){
-        this.dispose();
-    }
+    public void setViewController(ViewController viewController) {this.viewController = viewController;}
+    public void accessSuccess(){this.dispose();}
 }

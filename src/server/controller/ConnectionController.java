@@ -17,6 +17,8 @@ public class ConnectionController extends Thread implements MessageSender {
     private GameRoom gameRoom;
     private Player player;
 
+
+    //생성자: 입출력 설정 | 플레이어 만들기 (컨트롤러랑 1:1 대응이라..?) + 플레이어 게임룸에 추가해주기
     public ConnectionController(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
@@ -29,8 +31,9 @@ public class ConnectionController extends Thread implements MessageSender {
             e.printStackTrace();
         }
 
+        //플레이어 설정해주기
         this.player = new Player();
-        gameRoom.addPlayer(player);
+        player.setMessageSender(this);
     }
 
     //클라이언트가 보낸게 이쪽의 in으로 들어와서, 브로드캐스트(다른 클라이언트들)한테 보내짐
@@ -51,11 +54,11 @@ public class ConnectionController extends Thread implements MessageSender {
         out.println(msg);
     }
 
+    //getter&setter
     public void setGameRoom(GameRoom gameRoom) {
         this.gameRoom = gameRoom;
+        this.gameRoom.addPlayer(player);
     }
-
     public Player getPlayer() {return player;}
-
     public void setPlayer(Player player) {this.player = player;}
 }

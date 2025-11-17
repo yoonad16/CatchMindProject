@@ -2,6 +2,8 @@ package server;
 
 import server.controller.ConnectionController;
 import server.controller.GameRoom;
+import server.service.DrawService;
+import server.service.GameService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,19 +14,20 @@ import java.util.List;
 public class Server extends Thread{
 	
 	private ServerSocket serverSocket;
-    private List<ConnectionController> clients = new ArrayList<>();
-    private GameRoom gameRoom = new GameRoom();
+    private final List<ConnectionController> clients = new ArrayList<>();
+    private final List<GameRoom> gameRooms = new ArrayList<>();
+    private final DrawService drawService = new DrawService();
+    private final GameService gameService = new GameService();
     
     public void run() {
+        makeGameRoom();
         try {
             serverSocket = new ServerSocket(10500);
 
             while (true) {
                 System.out.println("서버 연결 대기중 ....");
                 Socket socket = serverSocket.accept();
-
-
-
+                addPlayer(socket);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -33,6 +36,8 @@ public class Server extends Thread{
     }
 
     public void addPlayer(Socket socket) {
+        GameRoom gameRoom = gameRooms.get(0);
+
         ConnectionController handler = new ConnectionController(socket, this);
         handler.setGameRoom(gameRoom);
         clients.add(handler);
@@ -41,7 +46,8 @@ public class Server extends Thread{
     }
 
     public void makeGameRoom() {
-
+        GameRoom newGameRoom = new GameRoom(drawService, gameService);
+        this.gameRooms.add(newGameRoom);
     }
 
 }
