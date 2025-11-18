@@ -8,7 +8,7 @@ public class Player {
     private String password;
     private MessageSender messageSender;
     private PlayerState state;
-    private int score;
+    private int score=0;
 
     public Player() {
         // default: 답맞추기
@@ -24,14 +24,15 @@ public class Player {
     public void sendMessage(String msg) {
         messageSender.send(msg);
     }
+    public void addScore(int score){this.score+=score;}
 
     //Getter & Setter
+    public boolean canAnswer() {return this.state.canAnswer();}
+    public boolean canDraw() {return this.state.canDraw();}
     public void setMessageSender(MessageSender messageSender) {this.messageSender = messageSender;}
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
     public void setState(PlayerState newState) {this.state = newState;}
-    public boolean canDraw() {return state.canDraw();}
-    public boolean canAnswer(){return state.canAnswer();}
     public String getId() {return id;}
     public void setId(String id) {this.id = id;}
     public String getPassword() {return password;}

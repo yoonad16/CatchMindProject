@@ -7,13 +7,11 @@ import server.service.GameService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 
 public class GameRoom {
     private final List<Player> players = new ArrayList<>();
     private String currentWord = "집";
     private Player drawer;
-    Timer gameTimer;
     Map<ConnectionController, Integer> scoreBoard;
     private DrawService drawService;
     private GameService gameService;
@@ -27,6 +25,9 @@ public class GameRoom {
     //게임룸에 플레이어 추가/삭제 로직
     public void addPlayer(Player p) {
         players.add(p);
+        if(drawer == null)
+            drawer = p; // 첫번째로 들어오는 사람 자동으로 drawer 배정
+
     }
     public void removePlayer(Player p) {
         players.remove(p);
@@ -48,10 +49,33 @@ public class GameRoom {
     }
 
 
-    //브로드캐스트 메소드-아마 건드릴거 없을듯?
+    //브로드캐스트 메소드
     public void broadcastToRoom (String msg) {
         for(Player p : players) {
             p.sendMessage(msg);
+        }
+    }
+
+    //
+    public Player selectNextDrawer() {
+
+        // GameRoom에서 플레이어 리스트 가져옴
+        List<Player> players = this.players;
+        if(players == null || players.isEmpty())
+            return null; // 방이 비었으면 null
+
+        // 지금 그림 그리는 사람
+        Player currentPlayer = this.drawer;
+        int currentIndex = players.indexOf(currentPlayer);
+
+        // 예외 처리: 그림 그리는 사람 없거나 중간에 퇴장했으면 첫번째 사람으로 ,,
+        if(currentIndex == -1)
+            return players.get(0);
+            // 다음 그림 그리는 사람
+        else{
+            int nextIndex = (currentIndex + 1) % players.size();
+            return players.get(nextIndex);
+
         }
     }
 
