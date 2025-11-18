@@ -26,7 +26,7 @@ public class CanvasPanel extends JPanel {
         canvas.addMouseMotionListener(drawingListener);
 
         add(canvas, BorderLayout.CENTER);
-        add(keyword, BorderLayout.SOUTH);
+        add(keyword, BorderLayout.NORTH);
     }
 
     public void paintCanvas (Point from, Point to ) {
@@ -38,10 +38,6 @@ public class CanvasPanel extends JPanel {
 
     public void sendCanvas (Point from, Point to) {
         viewController.sendDrawing(from,to);
-    }
-
-    public void setViewController(ViewController viewController) {
-        this.viewController = viewController;
     }
 
     MouseAdapter drawingListener = new MouseAdapter() {
@@ -66,4 +62,8 @@ public class CanvasPanel extends JPanel {
             lastPoint = current;
         }
     };
+
+    public void setViewController(ViewController viewController) {
+        this.viewController = viewController;
+    }
 }

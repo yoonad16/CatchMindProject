@@ -20,7 +20,7 @@ public class Server extends Thread{
     private final GameService gameService = new GameService();
     
     public void run() {
-        makeGameRoom();
+        this.makeGameRoom();
         try {
             serverSocket = new ServerSocket(50023);
 
