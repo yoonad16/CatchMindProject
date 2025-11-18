@@ -4,6 +4,7 @@ import server.controller.ConnectionController;
 import server.controller.GameRoom;
 import server.service.DrawService;
 import server.service.GameService;
+import server.repository.QuizWordRepository;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,11 +17,18 @@ public class Server extends Thread{
 	private ServerSocket serverSocket;
     private final List<ConnectionController> clients = new ArrayList<>();
     private final List<GameRoom> gameRooms = new ArrayList<>();
-    private final DrawService drawService = new DrawService();
-    private final GameService gameService = new GameService();
-    
+    private DrawService drawService;
+    private GameService gameService;
+    private QuizWordRepository quizWordRepository;
+
+    public Server(){
+        this.drawService = new DrawService();
+        this.quizWordRepository = new QuizWordRepository();
+        this.gameService = new GameService(this.quizWordRepository);
+    }
+
     public void run() {
-        this.makeGameRoom();
+        makeGameRoom();
         try {
             serverSocket = new ServerSocket(50023);
 

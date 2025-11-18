@@ -21,6 +21,11 @@ public class ViewController {
         client.sendDrawing(from, to);
     }
 
+    public void updateDrawState (boolean state) {
+        if (state) mainFrame.enableDrawing();
+        else mainFrame.disableDrawing();
+    }
+
     public void updateCanvasPanel(Point from, Point to) {mainFrame.updateCanvas(from, to);}
     public void eraseCanvasPanel() {mainFrame.eraseCanvas();}
     public void updateChatPanel(String msg) {

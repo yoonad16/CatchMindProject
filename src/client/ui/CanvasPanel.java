@@ -69,6 +69,16 @@ public class CanvasPanel extends JPanel {
         this.viewController = viewController;
     }
 
+    public void disableCanvasDrawing() {
+        canvas.removeMouseListener(drawingListener);
+        canvas.removeMouseMotionListener(drawingListener);
+    }
+
+    public void enalbeCanvasDrawing() {
+        canvas.addMouseListener(drawingListener);
+        canvas.addMouseMotionListener(drawingListener);
+    }
+
     MouseAdapter drawingListener = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {

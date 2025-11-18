@@ -40,6 +40,8 @@ public class MainFrame extends JFrame {
         canvasPanel.eraseCanvas();
     }
 
+    public void disableDrawing() {canvasPanel.disableCanvasDrawing();}
+    public void enableDrawing() {canvasPanel.enalbeCanvasDrawing();}
     public void updateKeyWord(String word) {
         this.canvasPanel.setKeyword(word);
     }

@@ -65,6 +65,14 @@ public class Client {
                      msg = tokens[1];
                      viewController.updateChatPanel(msg);
                  }
+                 else if (tokens[0].equals("DRAWSTATE")) {
+                     boolean drawState;
+                     if (tokens[1].equals("true")) drawState = true;
+                     else drawState = false;
+
+                     viewController.updateDrawState(drawState);
+
+                 }
              }
          } catch (IOException e) {
 
