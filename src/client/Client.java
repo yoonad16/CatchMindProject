@@ -28,6 +28,15 @@ public class Client {
      }
  }
 
+ public void disconnect() {
+     try {
+         socket.close();
+         in.close();
+         out.close();
+     } catch (IOException e) {
+         e.printStackTrace();
+     }
+ }
  public void send(String msg) {
      out.println(msg);
      out.flush();
@@ -41,27 +50,49 @@ public class Client {
  public void listen() {
      Thread listen = new Thread(() -> {
          String msg;
-         while (true) {
-             try {
-                 if ((msg = in.readLine()) != null){
-
-                     if(msg.startsWith("DRAW")){
-                         String[] points = msg.split(":");
-                         Point from = new Point(Integer.parseInt(points[1]),Integer.parseInt(points[2]));
-                         Point to = new Point(Integer.parseInt(points[3]),Integer.parseInt(points[4]));
-                         viewController.updateCanvasPanel(from, to);
-                     }
-                     else {
-                         viewController.updateChatPanel(msg);
-                     }
+         try {
+             while ((msg = in.readLine())!=null) {
+                 String[] tokens = msg.split(":");
+                 if(tokens[0].equals("DRAW")){
+                     Point from = new Point(Integer.parseInt(tokens[1]),Integer.parseInt(tokens[2]));
+                     Point to = new Point(Integer.parseInt(tokens[3]),Integer.parseInt(tokens[4]));
+                     viewController.updateCanvasPanel(from, to);
                  }
-             } catch (IOException e) {
-                 e.printStackTrace();
+                 else if (tokens[0].equals("ERASE")){
+                     viewController.eraseCanvasPanel();
+                 }
+                 else if (tokens[0].equals("CHAT")) {
+                     msg = tokens[1];
+                     viewController.updateChatPanel(msg);
+                 }
              }
+         } catch (IOException e) {
+
+         }finally {
+             disconnect();
          }
      });
 
      listen.start();
+ }
+
+ public void parseMessage(String msg) {
+     String[] tokens = msg.split(":");
+
+     switch(tokens[0]) {
+         case "DRAW":
+             Point from = new Point(Integer.parseInt(tokens[1]),Integer.parseInt(tokens[2]));
+             Point to = new Point(Integer.parseInt(tokens[3]),Integer.parseInt(tokens[4]));
+             viewController.updateCanvasPanel(from, to);
+             break;
+         case "ERASE":
+             viewController.eraseCanvasPanel();
+             break;
+         case "CHAT":
+             msg = tokens[1];
+             viewController.updateChatPanel(msg);
+             break;
+     }
  }
 
  public void setViewController(ViewController viewController) {

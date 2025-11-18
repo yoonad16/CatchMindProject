@@ -4,6 +4,8 @@ import client.controller.ViewController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -11,6 +13,7 @@ public class ChatPanel extends JPanel{
 
     public JTextArea textArea;
     public JTextField inputText;
+    private JButton leaveButton;
 
     private ViewController viewController;
 
@@ -28,6 +31,14 @@ public class ChatPanel extends JPanel{
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
 
+        leaveButton = new JButton("게임 나가기");
+        leaveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               exitRoom();
+            }
+        });
+
         JScrollPane scrollBar = new JScrollPane(textArea);
         scrollBar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -36,6 +47,7 @@ public class ChatPanel extends JPanel{
 
         add(scrollBar, BorderLayout.CENTER);
         add(inputText, BorderLayout.SOUTH);
+        add(leaveButton, BorderLayout.NORTH);
 
         inputText.addKeyListener(new KeyListener() {
             @Override
@@ -46,7 +58,7 @@ public class ChatPanel extends JPanel{
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER){
-                    String msg = inputText.getText();
+                    String msg = "CHAT:"+inputText.getText();
                     viewController.sendChat(msg);
                 }
             }
@@ -66,6 +78,7 @@ public class ChatPanel extends JPanel{
     public void updateTextArea(String msg) {
         this.textArea.append(msg+"\n");
     }
+    public void exitRoom() {this.viewController.exitRoom();}
 
     public void setViewController (ViewController viewController) {
         this.viewController = viewController;

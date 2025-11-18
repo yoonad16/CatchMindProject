@@ -12,6 +12,7 @@ public class CanvasPanel extends JPanel {
     private JTextField keyword;
     private Point lastPoint = null;
     private ViewController viewController;
+    private JButton eraseButton;
 
     public CanvasPanel() {
         setLayout(new BorderLayout());
@@ -19,14 +20,23 @@ public class CanvasPanel extends JPanel {
 
         canvas = new JPanel();
         canvas.setBackground(Color.WHITE);
-        keyword = new JTextField();
+
+        eraseButton = new JButton("지우기");
+        eraseButton.setSize(100,50);
+        eraseButton.addActionListener(eraseButtonClicked);
+
+        keyword = new JTextField("제시어: ");
+        keyword.setSize(400,50);
         keyword.setBackground(Color.lightGray);
+        keyword.setEditable(false);
+        keyword.setHorizontalAlignment(JTextField.CENTER);
 
         canvas.addMouseListener(drawingListener);
         canvas.addMouseMotionListener(drawingListener);
 
         add(canvas, BorderLayout.CENTER);
         add(keyword, BorderLayout.NORTH);
+        add(eraseButton,BorderLayout.SOUTH);
     }
 
     public void paintCanvas (Point from, Point to ) {
@@ -40,30 +50,49 @@ public class CanvasPanel extends JPanel {
         viewController.sendDrawing(from,to);
     }
 
+    public void eraseCanvas() {
+        this.canvas.repaint();
+    }
+
+    public void sendErase() {
+        viewController.sendErase("ERASE:");
+    }
+
+    public void setKeyword(String word) {
+        keyword.setText("제시어: " +word);
+    }
+
+    public void emptyKeyWord(String word) {
+        keyword.setText("제시어: ???");
+    }
+    public void setViewController(ViewController viewController) {
+        this.viewController = viewController;
+    }
+
     MouseAdapter drawingListener = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
             lastPoint = e.getPoint();
         }
-
         @Override
         public void mouseReleased(MouseEvent e) {
             lastPoint = null;
         }
-
         @Override
         public void mouseDragged(MouseEvent e) {
             Point current = e.getPoint();
 
             if(lastPoint != null) {
-//                paintCanvas(lastPoint, current);
                 sendCanvas(lastPoint, current);
             }
             lastPoint = current;
         }
     };
 
-    public void setViewController(ViewController viewController) {
-        this.viewController = viewController;
-    }
+    ActionListener eraseButtonClicked = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            sendErase();
+        }
+    };
 }

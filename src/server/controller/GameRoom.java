@@ -31,6 +31,7 @@ public class GameRoom {
     public void removePlayer(Player p) {
         players.remove(p);
         broadcastToRoom(p.getName()+"님이 방을 나가셨습니다.");
+        System.out.println(p.getName()+"님이 방을 나가셨습니다.");
     }
 
     //들어오는 메시지 1차 처리(각 서비스로 전달)
@@ -41,6 +42,9 @@ public class GameRoom {
         }
         else if (msg.startsWith("NAME")){
             gameService.nameMessage(this, msg, player);
+        }
+        else if (msg.startsWith("ERASE")){
+            gameService.eraseMessage(this, msg);
         }
         else{
             gameService.answerMessage(this, msg, player);

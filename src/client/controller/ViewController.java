@@ -5,26 +5,24 @@ import client.ui.MainFrame;
 
 import java.awt.*;
 
+import static java.lang.System.exit;
+
 //중계자: 클라이언트-UI 연결하고 중계
 public class ViewController {
     private Client client;
     private MainFrame mainFrame;
 
 
-
-
     public void sendChat(String msg) {
         client.send(msg);
     }
-
+    public void sendErase(String msg) {client.send(msg);}
     public void sendDrawing(Point from, Point to) {
         client.sendDrawing(from, to);
     }
 
-    public void updateCanvasPanel(Point from, Point to) {
-        mainFrame.updateCanvas(from, to);
-    }
-
+    public void updateCanvasPanel(Point from, Point to) {mainFrame.updateCanvas(from, to);}
+    public void eraseCanvasPanel() {mainFrame.eraseCanvas();}
     public void updateChatPanel(String msg) {
         mainFrame.updateTextArea(msg);
     }
@@ -39,5 +37,12 @@ public class ViewController {
         client.send("NAME:"+name);
         client.listen();
         client.setViewController(this);
+    }
+
+    public void exitRoom() {
+        mainFrame.dispose();
+        System.out.println("서버와의 연결이 종료됩니다.");
+        client.disconnect();
+        System.exit(0);
     }
 }

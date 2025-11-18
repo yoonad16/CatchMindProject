@@ -35,4 +35,12 @@ public class MainFrame extends JFrame {
     public void updateCanvas(Point from, Point to) {
         canvasPanel.paintCanvas(from, to);
     }
+
+    public void eraseCanvas() {
+        canvasPanel.eraseCanvas();
+    }
+
+    public void updateKeyWord(String word) {
+        this.canvasPanel.setKeyword(word);
+    }
 }

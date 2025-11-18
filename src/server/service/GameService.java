@@ -5,12 +5,17 @@ import server.domain.Player;
 
 public class GameService {
 
+    public void eraseMessage(GameRoom gameRoom, String msg) {
+        gameRoom.broadcastToRoom(msg);
+    }
+
     //DRAW/NAME 아닌 메시지 처리 메소드
     public void answerMessage (GameRoom gameRoom,String msg, Player player) {
         String message;
 
         if (compareWord(gameRoom, msg)){
-            message = "["+player.getName()+"]: "+msg+"\n";
+            message = "CHAT:";
+            message += "["+player.getName()+"] "+msg+"\n";
             message += player.getName()+"님이 정답을 맞추셨습니다.";
 
             correctAnswer(player);
@@ -18,7 +23,8 @@ public class GameService {
             gameRoom.broadcastToRoom(message);
         }
         else{
-            message = "["+player.getName()+"]: "+msg;
+            message = "CHAT:";
+            message += "["+player.getName()+"] "+msg;
             gameRoom.broadcastToRoom(message);
         }
     }
