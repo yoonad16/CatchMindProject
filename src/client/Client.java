@@ -89,7 +89,7 @@ public class Client {
              viewController.eraseCanvasPanel();
              break;
          case "CHAT":
-             msg = tokens[1];
+             msg = tokens[2];
              viewController.updateChatPanel(msg);
              break;
      }

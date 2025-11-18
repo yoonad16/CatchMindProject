@@ -47,6 +47,8 @@ public class GameRoom {
             gameService.eraseMessage(this, msg);
         }
         else{
+            String[] tokens = msg.split(":");
+            msg = tokens[1];
             gameService.answerMessage(this, msg, player);
         }
     }
