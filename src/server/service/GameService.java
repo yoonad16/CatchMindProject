@@ -45,7 +45,7 @@ public class GameService {
         player.setName(tokens[1]);
 
         if (player.equals(gameRoom.getDrawer()))
-            player.setState(new AnsweringState());
+            player.setState(new DrawingState());
         else
             player.setState(new AnsweringState());
 
