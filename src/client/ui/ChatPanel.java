@@ -15,6 +15,8 @@ public class ChatPanel extends JPanel{
     public JTextField inputText;
     private JButton leaveButton;
 
+    private JPanel gamePanel;
+
     private ViewController viewController;
 
     public ChatPanel() {
@@ -31,14 +33,6 @@ public class ChatPanel extends JPanel{
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
 
-        leaveButton = new JButton("게임 나가기");
-        leaveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               exitRoom();
-            }
-        });
-
         JScrollPane scrollBar = new JScrollPane(textArea);
         scrollBar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -47,30 +41,6 @@ public class ChatPanel extends JPanel{
 
         add(scrollBar, BorderLayout.CENTER);
         add(inputText, BorderLayout.SOUTH);
-        add(leaveButton, BorderLayout.NORTH);
-
-        inputText.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyChar() == KeyEvent.VK_ENTER){
-                    String msg = "CHAT:"+inputText.getText();
-                    viewController.sendChat(msg);
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyChar() == KeyEvent.VK_ENTER){
-                    inputText.setText("");
-                }
-            }
-        });
-
 
         setVisible(true);
     }
@@ -80,8 +50,29 @@ public class ChatPanel extends JPanel{
     }
     public void exitRoom() {this.viewController.exitRoom();}
 
+    public void enableChatInput() {inputText.addKeyListener(chat);}
+    public void disableChatInput() {inputText.removeKeyListener(chat);}
     public void setViewController (ViewController viewController) {
         this.viewController = viewController;
     }
 
+    KeyListener chat = new KeyListener() {
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyChar() == KeyEvent.VK_ENTER){
+                String msg = "CHAT:"+inputText.getText();
+                viewController.sendChat(msg);
+            }
+        }
+        @Override
+        public void keyReleased(KeyEvent e) {
+            if (e.getKeyChar() == KeyEvent.VK_ENTER){
+                inputText.setText("");
+            }
+        }
+    };
 }

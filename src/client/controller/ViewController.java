@@ -1,6 +1,8 @@
 package client.controller;
 
 import client.Client;
+import client.command.Command;
+import client.command.CommandFactory;
 import client.ui.MainFrame;
 
 import java.awt.*;
@@ -11,7 +13,11 @@ import static java.lang.System.exit;
 public class ViewController {
     private Client client;
     private MainFrame mainFrame;
+    private final CommandFactory commandFactory = CommandFactory.getInstance();
 
+    public void processMessage(String msg) {
+        commandFactory.createCommand(this,msg);
+    }
 
     public void sendChat(String msg) {
         client.send(msg);
@@ -47,6 +53,15 @@ public class ViewController {
         client.send("NAME:"+name);
         client.listen();
         client.setViewController(this);
+    }
+
+    public void startGame() {
+        this.mainFrame.enablePanel();
+        this.mainFrame.disableStartButton();
+    }
+
+    public void noticeStart() {
+        client.send("START:");
     }
 
     public void exitRoom() {

@@ -1,6 +1,6 @@
 package server.controller;
 
-import server.CommandFactory;
+import server.command.CommandFactory;
 import server.domain.Player;
 import server.service.DrawService;
 import server.service.GameService;
@@ -31,7 +31,7 @@ public class GameRoom {
             drawer = p; // 첫번째로 들어오는 사람 자동으로 drawer 배정
         }
         if (players.size() == 1) {
-            gameService.startGame(this);
+//            gameService.startGame(this);
         }
     }
     public void removePlayer(Player p) {
