@@ -1,22 +1,17 @@
 package server.controller;
 
-import server.domain.AnsweringState;
-import server.domain.DrawingState;
 import server.domain.Player;
 import server.service.DrawService;
 import server.service.GameService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
+import java.util.*;
 
 public class GameRoom {
     private final List<Player> players = new ArrayList<>();
     private String currentWord = "집";
     private Player drawer;
     Timer gameTimer;
-    Map<ConnectionController, Integer> scoreBoard;
+    private final Map<Player, Integer> scoreBoard = new HashMap<>();
     private DrawService drawService;
     private GameService gameService;
 
@@ -29,12 +24,14 @@ public class GameRoom {
     //게임룸에 플레이어 추가/삭제 로직
     public void addPlayer(Player p) {
         players.add(p);
+        scoreBoard.put(p, 0); // 점수 초기값 = 0
         if(drawer == null) {
             drawer = p; // 첫번째로 들어오는 사람 자동으로 drawer 배정
         }
     }
     public void removePlayer(Player p) {
         players.remove(p);
+        scoreBoard.remove(p);
         broadcastToRoom(p.getName()+"님이 방을 나가셨습니다.");
         System.out.println(p.getName()+"님이 방을 나가셨습니다.");
     }
@@ -66,26 +63,19 @@ public class GameRoom {
     }
 
     //이거 여기 있어야하는 메소드가 맞나...? ㅇㅅㅇ?
+    // GameRoom이 플레이어 목록 갖고있어서 여기로 옮김.
+    // GameService에 두면 player, drawer 계속 참조해야해서 객체 간 결합도 증가해서 옮겼다~~라고 쓰면될듯
+
     public Player selectNextDrawer() {
+        if (players.isEmpty())
+            return null;
 
-        // GameRoom에서 플레이어 리스트 가져옴
-        List<Player> players = this.players;
-        if(players == null || players.isEmpty())
-            return null; // 방이 비었으면 null
+        int currentIndex = players.indexOf(drawer);
 
-        // 지금 그림 그리는 사람
-        Player currentPlayer = this.drawer;
-        int currentIndex = players.indexOf(currentPlayer);
-
-        // 예외 처리: 그림 그리는 사람 없거나 중간에 퇴장했으면 첫번째 사람으로 ,,
-        if(currentIndex == -1)
+        if (currentIndex == -1)
             return players.get(0);
-            // 다음 그림 그리는 사람
-        else{
-            int nextIndex = (currentIndex + 1) % players.size();
-            return players.get(nextIndex);
 
-        }
+        return players.get((currentIndex + 1) % players.size());
     }
 
 
@@ -94,5 +84,6 @@ public class GameRoom {
     public void setCurrentWord(String currentWord) {this.currentWord = currentWord;}
     public void setDrawer (Player player) {this.drawer = player;}
     public Player getDrawer () {return this.drawer;}
+    public Map<Player, Integer> getScoreBoard() {return scoreBoard;}
     public List<Player> getPlayers () {return this.players;}
 }

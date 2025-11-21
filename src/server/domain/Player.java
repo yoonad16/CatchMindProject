@@ -25,7 +25,6 @@ public class Player {
     public void sendMessage(String msg) {
         messageSender.send(msg);
     }
-    public void addScore(int score){this.score+=score;}
 
     //Getter & Setter
     public boolean canAnswer() {return this.state.canAnswer();}

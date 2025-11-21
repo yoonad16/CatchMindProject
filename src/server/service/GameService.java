@@ -7,6 +7,7 @@ import server.domain.Player;
 import server.repository.QuizWordRepository;
 
 import java.util.List;
+import java.util.Map;
 
 public class GameService {
     // 정답 당 10점씩 올라가는걸로 일단 구현할게요
@@ -15,6 +16,28 @@ public class GameService {
 
     public GameService(QuizWordRepository quizWordRepository) {
         this.quizWordRepository = quizWordRepository;
+    }
+
+    // 점수 관리
+
+    // 정답 맞춘 플레이어에게 점수 주기
+    public void addScore(GameRoom gameRoom, Player player) {
+        Map<Player, Integer> board = gameRoom.getScoreBoard();
+        Integer currentScore = board.get(player);
+
+        if (currentScore == null)
+            currentScore = 0;
+
+        board.put(player, board.get(player) + SCORE_PER_ANSWER);
+    }
+
+    public int getPlayerScore(GameRoom gameRoom, Player player) {
+        Integer score = gameRoom.getScoreBoard().get(player);
+        if (score == null) {
+            return 0;
+        }
+        return score;
+
     }
 
     // 공용 채팅
@@ -30,12 +53,14 @@ public class GameService {
     //DRAW/NAME 아닌 메시지 처리 메소드
     public void answerMessage (GameRoom gameRoom,String msg, Player player) {
 
-        if (compareWord(gameRoom, msg)) {
-            chat(gameRoom, player, msg);
+        boolean isCorrect = compareWord(gameRoom, msg);
+
+        if (isCorrect) 
             correctAnswer(player, gameRoom, msg);
-        } else if (player.canAnswer()){
+        
+        else if (player.canAnswer()) 
             chat(gameRoom, player, msg);
-        }
+        
     }
 
     //NAME: 닉네임 설정하는 메시지 처리 메소드
@@ -55,21 +80,19 @@ public class GameService {
     //답 맞는지 체크하는 메소드
     public boolean compareWord (GameRoom gameRoom,String word) {
         String correctWord = gameRoom.getCurrentWord();
-        if(correctWord == null || word == null){
+        if(correctWord == null || word == null)
             return false;
-        }
-        return word.equalsIgnoreCase(gameRoom.getCurrentWord());
+        return word.equalsIgnoreCase(correctWord);
     }
 
     // 맞았을 때 로직: 점수 올리기, 제시어 바꾸기, 그림그리는 사람 바꾸기 등.. => SRP 위반 => 기능별로 메소드 분리함
 
     public void correctAnswer(Player player, GameRoom gameRoom, String msg) {
 
-        gameRoom.broadcastToRoom("[" + player.getName() + "]: " + msg);
         gameRoom.broadcastToRoom("[System] " + player.getName() + "님이 정답을 맞추셨습니다! (+" + SCORE_PER_ANSWER + "점)");
 
         // 점수 추가
-        player.addScore(SCORE_PER_ANSWER);
+        addScore(gameRoom, player);
 
         // 다음 라운드 진행
         nextRound(gameRoom);
@@ -77,7 +100,7 @@ public class GameService {
     // 다음 라운드 준비
     private void nextRound(GameRoom gameRoom) {
         // 다음 그림 그리는 사람 선택
-        Player newDrawer = nextDrawer(gameRoom);
+        Player newDrawer = gameRoom.selectNextDrawer();
         gameRoom.setDrawer(newDrawer);
 
         // 사용자 업데이트
@@ -103,14 +126,7 @@ public class GameService {
 
         return nextWord;
     }
-
-    private Player nextDrawer(GameRoom gameRoom) {
-        Player nextDrawer = gameRoom.selectNextDrawer();
-        if(nextDrawer != null)
-            gameRoom.setDrawer(nextDrawer);
-        return nextDrawer;
-
-    }
+    
 
     // 사용자 상태 업데이트
     public void updatePlayerStates(GameRoom gameRoom, Player newDrawer) {
