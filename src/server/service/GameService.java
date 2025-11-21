@@ -115,6 +115,8 @@ public class GameService {
 
                 p.sendMessage("DRAWSTATE:false");
 
+                p.sendMessage("KEYWORD:???");
+
             }
         }
     }
