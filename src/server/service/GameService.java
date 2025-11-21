@@ -18,40 +18,6 @@ public class GameService {
     }
 
     // 공용 채팅
-    private void chat(GameRoom gameRoom, Player player, String msg) {
-        String formattedMsg = "CHAT:[" + player.getName() + "] " + msg;
-        gameRoom.broadcastToRoom(formattedMsg);
-    }
-
-    public void eraseMessage(GameRoom gameRoom, String msg) {
-        gameRoom.broadcastToRoom(msg);
-    }
-
-    //DRAW/NAME 아닌 메시지 처리 메소드
-    public void answerMessage (GameRoom gameRoom,String msg, Player player) {
-
-        if (compareWord(gameRoom, msg)) {
-            chat(gameRoom, player, msg);
-            correctAnswer(player, gameRoom, msg);
-        } else if (player.canAnswer()){
-            chat(gameRoom, player, msg);
-        }
-    }
-
-    //NAME: 닉네임 설정하는 메시지 처리 메소드
-    public void nameMessage (GameRoom gameRoom, String msg, Player player) {
-
-        String[] tokens = msg.split(":");
-        player.setName(tokens[1]);
-
-        if (player.equals(gameRoom.getDrawer()))
-            player.setState(new DrawingState());
-        else
-            player.setState(new AnsweringState());
-
-        gameRoom.broadcastToRoom(player.getName() + "님이 입장하셨습니다.");
-    }
-
     //답 맞는지 체크하는 메소드
     public boolean compareWord (GameRoom gameRoom,String word) {
         String correctWord = gameRoom.getCurrentWord();
@@ -67,7 +33,6 @@ public class GameService {
 
         gameRoom.broadcastToRoom("[" + player.getName() + "]: " + msg);
         gameRoom.broadcastToRoom("[System] " + player.getName() + "님이 정답을 맞추셨습니다! (+" + SCORE_PER_ANSWER + "점)");
-
         // 점수 추가
         player.addScore(SCORE_PER_ANSWER);
 

@@ -1,7 +1,6 @@
 package server.controller;
 
-import server.domain.AnsweringState;
-import server.domain.DrawingState;
+import server.CommandFactory;
 import server.domain.Player;
 import server.service.DrawService;
 import server.service.GameService;
@@ -17,8 +16,9 @@ public class GameRoom {
     private Player drawer;
     Timer gameTimer;
     Map<ConnectionController, Integer> scoreBoard;
-    private DrawService drawService;
-    private GameService gameService;
+    private final DrawService drawService;
+    private final GameService gameService;
+    private final CommandFactory commandFactory = CommandFactory.getInstance();
 
     public GameRoom (DrawService drawService, GameService gameService) {
         this.gameService = gameService;
@@ -39,23 +39,10 @@ public class GameRoom {
         System.out.println(p.getName()+"님이 방을 나가셨습니다.");
     }
 
+    //메시지 처리 관련 로직
     //들어오는 메시지 1차 처리(각 서비스로 전달)
     public void processMessage (Player player, String msg) {
-
-        if(msg.startsWith("DRAW")){
-            drawService.sendDrawDate(this, msg);
-        }
-        else if (msg.startsWith("NAME")){
-            gameService.nameMessage(this, msg, player);
-        }
-        else if (msg.startsWith("ERASE")){
-            gameService.eraseMessage(this, msg);
-        }
-        else{
-            String[] tokens = msg.split(":");
-            msg = tokens[1];
-            gameService.answerMessage(this, msg, player);
-        }
+        commandFactory.createCommand(this, msg, player);
     }
 
     //브로드캐스트 메소드-아마 건드릴거 없을듯?
@@ -95,4 +82,6 @@ public class GameRoom {
     public void setDrawer (Player player) {this.drawer = player;}
     public Player getDrawer () {return this.drawer;}
     public List<Player> getPlayers () {return this.players;}
+    public DrawService getDrawService() {return this.drawService;}
+    public GameService getGameService() {return this.gameService;}
 }
