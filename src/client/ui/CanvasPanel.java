@@ -70,11 +70,15 @@ public class CanvasPanel extends JPanel {
     public void disableCanvasDrawing() {
         canvas.removeMouseListener(drawingListener);
         canvas.removeMouseMotionListener(drawingListener);
+        System.out.println("[DEBUG] 그리기 모드 비활성화됨");
     }
 
     public void enalbeCanvasDrawing() {
+        canvas.removeMouseListener(drawingListener);
+        canvas.removeMouseMotionListener(drawingListener);
         canvas.addMouseListener(drawingListener);
         canvas.addMouseMotionListener(drawingListener);
+        System.out.println("[DEBUG] 그리기 모드 활성화됨");
     }
 
     MouseAdapter drawingListener = new MouseAdapter() {
