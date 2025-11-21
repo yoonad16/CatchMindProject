@@ -9,17 +9,21 @@ import java.awt.event.*;
 public class CanvasPanel extends JPanel {
 
     private JPanel canvas;
-    private JPanel colorPalette;
+    private ColorPalette colorPalette;
     private JTextField keyword;
     private Point lastPoint = null;
     private ViewController viewController;
     private JButton eraseButton;
+    private Color currentColor = Color.BLACK;
 
     public CanvasPanel() {
         setLayout(new BorderLayout());
 
         canvas = new JPanel();
         canvas.setBackground(Color.WHITE);
+
+        colorPalette = new ColorPalette();
+        colorPalette.setPreferredSize(new Dimension(30,500));
 
         eraseButton = new JButton("지우기");
         eraseButton.setSize(100,50);
@@ -31,6 +35,7 @@ public class CanvasPanel extends JPanel {
         keyword.setEditable(false);
         keyword.setHorizontalAlignment(JTextField.CENTER);
 
+        add(colorPalette, BorderLayout.WEST);
         add(canvas, BorderLayout.CENTER);
         add(keyword, BorderLayout.NORTH);
         add(eraseButton,BorderLayout.SOUTH);
@@ -39,7 +44,7 @@ public class CanvasPanel extends JPanel {
     public void paintCanvas (Point from, Point to ) {
         Graphics2D g2 = (Graphics2D) canvas.getGraphics();
         g2.setStroke(new BasicStroke(3));
-        g2.setColor(Color.BLACK);
+        g2.setColor(currentColor);
         g2.drawLine(from.x, from.y, to.x, to.y);
     }
 
@@ -55,6 +60,9 @@ public class CanvasPanel extends JPanel {
         viewController.sendErase("ERASE:");
     }
 
+    public void updateColor(String msg) {
+        System.out.println("color update in canvaspanel");this.currentColor = new Color(Integer.parseInt(msg));}
+
     public void setKeyword(String word) {
         System.out.println("[DEBUG] 화면 갱신 요청 받음: " + word);
         keyword.setText("제시어: " +word);
@@ -65,6 +73,7 @@ public class CanvasPanel extends JPanel {
     }
     public void setViewController(ViewController viewController) {
         this.viewController = viewController;
+        this.colorPalette.setViewController(viewController);
     }
 
     public void disableCanvasDrawing() {

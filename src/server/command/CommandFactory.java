@@ -16,6 +16,7 @@ public class CommandFactory {
         commandMap.put("CHAT", new ChatCommand());
         commandMap.put("ERASE", new EraseCommand());
         commandMap.put("START", new StartCommand());
+        commandMap.put("COLOR", new ColorCommand());
     }
 
     public static CommandFactory getInstance() {

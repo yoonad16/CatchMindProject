@@ -64,6 +64,9 @@ public class MainFrame extends JFrame {
         canvasPanel.paintCanvas(from, to);
     }
 
+    public void updateCurrentColor (String msg) {
+        System.out.println("in mainframe");this.canvasPanel.updateColor(msg);}
+
     public void eraseCanvas() {
         canvasPanel.eraseCanvas();
     }
