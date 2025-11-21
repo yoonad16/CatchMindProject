@@ -32,13 +32,7 @@ public class Player {
     public void setMessageSender(MessageSender messageSender) {this.messageSender = messageSender;}
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
-    public void setState(PlayerState newState) {
-        this.state = newState;
-        messageSender.send("DRAWSTATE:"+newState.canDraw());
-        System.out.println("DRAWSTATE:"+newState.canDraw());
-//        messageSender.send("ANSWERSTATE:"+newState.canAnswer());
-//        System.out.println("ANSWERSTATE:"+newState.canAnswer());
-    }
+    public void setState(PlayerState newState) {this.state = newState;}
     public String getId() {return id;}
     public void setId(String id) {this.id = id;}
     public String getPassword() {return password;}

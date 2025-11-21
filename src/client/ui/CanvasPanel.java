@@ -9,6 +9,7 @@ import java.awt.event.*;
 public class CanvasPanel extends JPanel {
 
     private JPanel canvas;
+    private JPanel colorPalette;
     private JTextField keyword;
     private Point lastPoint = null;
     private ViewController viewController;
@@ -16,7 +17,6 @@ public class CanvasPanel extends JPanel {
 
     public CanvasPanel() {
         setLayout(new BorderLayout());
-        setSize(500,500);
 
         canvas = new JPanel();
         canvas.setBackground(Color.WHITE);
