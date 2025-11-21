@@ -7,8 +7,7 @@ import server.service.GameService;
 
 public class ChatCommand implements Command {
     @Override
-    public void execute(ViewController viewController, String msg) {
-        String[] tokens = msg.split(":");
-        viewController.updateChatPanel(tokens[1]);
+    public void execute(ViewController viewController, String data) {
+        viewController.updateChatPanel(data);
     }
 }

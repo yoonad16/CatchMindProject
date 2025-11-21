@@ -26,6 +26,8 @@ public class ViewController {
     public void sendDrawing(Point from, Point to) {
         client.sendDrawing(from, to);
     }
+    public void sendColor(String colorCode) {
+        System.out.println("sendcolor in view controller");client.send("COLOR:"+colorCode);}
 
     public void updateDrawState (boolean state) {
         if (state) {
@@ -42,12 +44,13 @@ public class ViewController {
     public void updateKeyWord(String keyword) {
         mainFrame.updateKeyWord(keyword);
     }
-
     public void updateCanvasPanel(Point from, Point to) {mainFrame.updateCanvas(from, to);}
     public void eraseCanvasPanel() {mainFrame.eraseCanvas();}
     public void updateChatPanel(String msg) {
         mainFrame.updateTextArea(msg);
     }
+    public void updateCurrentColor(String colorCode) {
+        System.out.println("update color in controller");mainFrame.updateCurrentColor(colorCode);}
 
     //여기서 객체 생성 하지 말고 DI 의존성 주입 하기 (메인 클래스의 메소드에서 생성해서 세팅하기)
     public void accessGame(String ip, String name) {

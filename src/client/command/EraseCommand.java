@@ -6,7 +6,7 @@ import server.domain.Player;
 
 public class EraseCommand implements Command {
     @Override
-    public void execute(ViewController viewController, String msg) {
+    public void execute(ViewController viewController, String data) {
         viewController.eraseCanvasPanel();
     }
 }

@@ -11,8 +11,8 @@ public class DrawCommand implements Command {
     public void execute(ViewController viewController, String msg) {
         String[] tokens = msg.split(":");
 
-        Point from = new Point(Integer.parseInt(tokens[1]),Integer.parseInt(tokens[2]));
-        Point to = new Point(Integer.parseInt(tokens[3]),Integer.parseInt(tokens[4]));
+        Point from = new Point(Integer.parseInt(tokens[0]),Integer.parseInt(tokens[1]));
+        Point to = new Point(Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]));
 
         viewController.updateCanvasPanel(from, to);
     }
