@@ -54,7 +54,6 @@ public class GameRoom {
         }
     }
 
-    //이거 여기 있어야하는 메소드가 맞나...? ㅇㅅㅇ?
     // GameRoom이 플레이어 목록 갖고있어서 여기로 옮김.
     // GameService에 두면 player, drawer 계속 참조해야해서 객체 간 결합도 증가해서 옮겼다~~라고 쓰면될듯
 
