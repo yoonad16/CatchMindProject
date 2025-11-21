@@ -52,6 +52,7 @@ public class Client {
          String msg;
          try {
              while ((msg = in.readLine())!=null) {
+                 System.out.println("[DEBUG] 클라이언트 수신함: " + msg);
                  String[] tokens = msg.split(":");
                  if(tokens[0].equals("DRAW")){
                      Point from = new Point(Integer.parseInt(tokens[1]),Integer.parseInt(tokens[2]));
@@ -60,6 +61,10 @@ public class Client {
                  }
                  else if (tokens[0].equals("ERASE")){
                      viewController.eraseCanvasPanel();
+                 }
+                 else if(tokens[0].equals("KEYWORD")){
+                     String keyword = tokens[1];
+                     viewController.updateKeyWord(keyword);
                  }
                  else if (tokens[0].equals("CHAT")) {
                      msg = tokens[1];
@@ -99,6 +104,9 @@ public class Client {
          case "CHAT":
              msg = tokens[2];
              viewController.updateChatPanel(msg);
+             break;
+         case "KEYWORD":
+             viewController.updateKeyWord(tokens[1]);
              break;
      }
  }

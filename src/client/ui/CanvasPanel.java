@@ -59,6 +59,7 @@ public class CanvasPanel extends JPanel {
     }
 
     public void setKeyword(String word) {
+        System.out.println("[DEBUG] 화면 갱신 요청 받음: " + word);
         keyword.setText("제시어: " +word);
     }
 

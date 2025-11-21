@@ -1,6 +1,5 @@
 package server.service;
 
-import client.ui.MainFrame;
 import server.controller.GameRoom;
 import server.domain.AnsweringState;
 import server.domain.DrawingState;
@@ -90,8 +89,15 @@ public class GameService {
         String nextWord = getNewQuizWord();
         gameRoom.setCurrentWord(nextWord);
 
-        //drawer만 제시어 볼 수 있음
-        gameRoom.getDrawer().sendMessage("[System] 제시어: " + nextWord);
+        System.out.println("[DEBUG] 현재 술래: " + gameRoom.getDrawer().getName());
+        System.out.println("[DEBUG] 선정된 단어: " + nextWord);
+
+        if (gameRoom.getDrawer() != null) {
+            gameRoom.getDrawer().sendMessage("KEYWORD:" + nextWord);
+            System.out.println("[DEBUG] 서버 -> 클라이언트 전송 완료: KEYWORD:" + nextWord);
+        } else {
+            System.out.println("[DEBUG] 술래가 null이라서 전송 못함!");
+        }
 
         return nextWord;
     }

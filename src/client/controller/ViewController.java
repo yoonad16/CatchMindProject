@@ -26,6 +26,11 @@ public class ViewController {
         else mainFrame.disableDrawing();
     }
 
+    // 제시어 업데이트해서 뜨게하기
+    public void updateKeyWord(String keyword) {
+        mainFrame.updateKeyWord(keyword);
+    }
+
     public void updateCanvasPanel(Point from, Point to) {mainFrame.updateCanvas(from, to);}
     public void eraseCanvasPanel() {mainFrame.eraseCanvas();}
     public void updateChatPanel(String msg) {
