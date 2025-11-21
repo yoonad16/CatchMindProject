@@ -72,6 +72,8 @@ public class MainFrame extends JFrame {
 
     public void disableDrawing() {canvasPanel.disableCanvasDrawing();}
     public void enableDrawing() {canvasPanel.enalbeCanvasDrawing();}
+    public void disableChatting() {chatPanel.disableChatInput();}
+    public void enableChatting() {chatPanel.enableChatInput();}
     public void updateKeyWord(String word) {
         this.canvasPanel.setKeyword(word);
     }

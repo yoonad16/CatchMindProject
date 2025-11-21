@@ -28,8 +28,14 @@ public class ViewController {
     }
 
     public void updateDrawState (boolean state) {
-        if (state) mainFrame.enableDrawing();
-        else mainFrame.disableDrawing();
+        if (state) {
+            mainFrame.enableDrawing();
+            mainFrame.disableChatting();
+        }
+        else {
+            mainFrame.disableDrawing();
+            mainFrame.enableChatting();
+        }
     }
 
     // 제시어 업데이트해서 뜨게하기
