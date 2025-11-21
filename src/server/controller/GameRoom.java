@@ -56,9 +56,9 @@ public class GameRoom {
     // GameService에 두면 player, drawer 계속 참조해야해서 객체 간 결합도 증가해서 옮겼다~~라고 쓰면될듯
 
     public Player selectNextDrawer() {
-        if (players.isEmpty())
-            return null;
-
+        if (drawer == null) {
+            return players.get(0);
+        }
         int currentIndex = players.indexOf(drawer);
 
         if (currentIndex == -1)

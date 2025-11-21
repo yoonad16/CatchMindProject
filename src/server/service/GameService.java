@@ -1,5 +1,6 @@
 package server.service;
 
+import client.ui.MainFrame;
 import server.controller.GameRoom;
 import server.domain.AnsweringState;
 import server.domain.DrawingState;
@@ -10,6 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 public class GameService {
+    public void startGame(GameRoom gameRoom) {
+        gameRoom.broadcastToRoom("[System] 게임이 시작되었습니다!");
+        nextRound(gameRoom);
+    }
+
     // 정답 당 10점씩 올라가는걸로 일단 구현할게요
     private static final int SCORE_PER_ANSWER = 10;
     private final QuizWordRepository quizWordRepository;
@@ -76,7 +82,7 @@ public class GameService {
             if (!p.equals(gameRoom.getDrawer()))
                 p.sendMessage("[System] 새로운 라운드가 시작되었습니다!");
         }
-        gameRoom.broadcastToRoom("다음 그림그리는 사람은 "+newDrawer.getName()+"님 입니다.");
+        gameRoom.broadcastToRoom("다음 그림 그리는 사람은 "+newDrawer.getName()+"님 입니다.");
 
     }
     // 제시어 바꾸기
@@ -89,7 +95,6 @@ public class GameService {
 
         return nextWord;
     }
-
 
     // 사용자 상태 업데이트
     public void updatePlayerStates(GameRoom gameRoom, Player newDrawer) {
