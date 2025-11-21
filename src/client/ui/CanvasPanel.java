@@ -31,9 +31,6 @@ public class CanvasPanel extends JPanel {
         keyword.setEditable(false);
         keyword.setHorizontalAlignment(JTextField.CENTER);
 
-        canvas.addMouseListener(drawingListener);
-        canvas.addMouseMotionListener(drawingListener);
-
         add(canvas, BorderLayout.CENTER);
         add(keyword, BorderLayout.NORTH);
         add(eraseButton,BorderLayout.SOUTH);
@@ -82,6 +79,7 @@ public class CanvasPanel extends JPanel {
     MouseAdapter drawingListener = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
+            if (!isEnabled()) return;
             lastPoint = e.getPoint();
         }
         @Override

@@ -1,5 +1,6 @@
 package client;
 
+import client.command.CommandFactory;
 import client.controller.ViewController;
 
 import java.awt.*;
@@ -52,27 +53,31 @@ public class Client {
          String msg;
          try {
              while ((msg = in.readLine())!=null) {
-                 String[] tokens = msg.split(":");
-                 if(tokens[0].equals("DRAW")){
-                     Point from = new Point(Integer.parseInt(tokens[1]),Integer.parseInt(tokens[2]));
-                     Point to = new Point(Integer.parseInt(tokens[3]),Integer.parseInt(tokens[4]));
-                     viewController.updateCanvasPanel(from, to);
-                 }
-                 else if (tokens[0].equals("ERASE")){
-                     viewController.eraseCanvasPanel();
-                 }
-                 else if (tokens[0].equals("CHAT")) {
-                     msg = tokens[1];
-                     viewController.updateChatPanel(msg);
-                 }
-                 else if (tokens[0].equals("DRAWSTATE")) {
-                     boolean drawState;
-                     if (tokens[1].equals("true")) drawState = true;
-                     else drawState = false;
-
-                     viewController.updateDrawState(drawState);
-
-                 }
+                 viewController.processMessage(msg);
+//                 String[] tokens = msg.split(":");
+//                 if(tokens[0].equals("DRAW")){
+//                     Point from = new Point(Integer.parseInt(tokens[1]),Integer.parseInt(tokens[2]));
+//                     Point to = new Point(Integer.parseInt(tokens[3]),Integer.parseInt(tokens[4]));
+//                     viewController.updateCanvasPanel(from, to);
+//                 }
+//                 else if (tokens[0].equals("ERASE")){
+//                     viewController.eraseCanvasPanel();
+//                 }
+//                 else if (tokens[0].equals("CHAT")) {
+//                     msg = tokens[1];
+//                     viewController.updateChatPanel(msg);
+//                 }
+//                 else if (tokens[0].equals("DRAWSTATE")) {
+//                     boolean drawState;
+//                     if (tokens[1].equals("true")) drawState = true;
+//                     else drawState = false;
+//
+//                     viewController.updateDrawState(drawState);
+//                 }
+//                 else if (tokens[0].equals("START")) {
+//                     System.out.println("START parsing correct");
+//                     viewController.startGame();
+//                 }
              }
          } catch (IOException e) {
 
@@ -100,6 +105,9 @@ public class Client {
              msg = tokens[2];
              viewController.updateChatPanel(msg);
              break;
+         case "START":
+             System.out.println("START parsing correct");
+             viewController.startGame();
      }
  }
 

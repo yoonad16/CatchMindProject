@@ -1,6 +1,6 @@
 package server.controller;
 
-import server.CommandFactory;
+import server.command.CommandFactory;
 import server.domain.Player;
 import server.service.DrawService;
 import server.service.GameService;

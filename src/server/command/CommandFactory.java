@@ -1,6 +1,5 @@
-package server;
+package server.command;
 
-import server.command.*;
 import server.controller.GameRoom;
 import server.domain.Player;
 
@@ -16,6 +15,7 @@ public class CommandFactory {
         commandMap.put("NAME", new NameCommand());
         commandMap.put("CHAT", new ChatCommand());
         commandMap.put("ERASE", new EraseCommand());
+        commandMap.put("START", new StartCommand());
     }
 
     public static CommandFactory getInstance() {
