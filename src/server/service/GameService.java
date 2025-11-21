@@ -70,6 +70,7 @@ public class GameService {
         // 다음 그림 그리는 사람 선택
         Player newDrawer = gameRoom.selectNextDrawer();
         gameRoom.setDrawer(newDrawer);
+        gameRoom.broadcastToRoom("ERASE");
 
         // 사용자 업데이트
         updatePlayerStates(gameRoom, newDrawer);
@@ -105,11 +106,16 @@ public class GameService {
     // 사용자 상태 업데이트
     public void updatePlayerStates(GameRoom gameRoom, Player newDrawer) {
         for(Player p: gameRoom.getPlayers()){
-            if(p.equals(newDrawer))
+            if(p.equals(newDrawer)) {
                 p.setState(new DrawingState());
 
-            else
+                p.sendMessage("DRAWSTATE:true");
+            } else {
                 p.setState(new AnsweringState());
+
+                p.sendMessage("DRAWSTATE:false");
+
+            }
         }
     }
 
