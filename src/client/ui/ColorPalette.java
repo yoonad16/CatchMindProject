@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 //빨강, 파랑, 초록, 노랑, 검정, 하양
 public class ColorPalette extends JPanel {
 
-    private Color[] colors = {Color.black, Color.blue, Color.red, Color.green, Color.white, Color.yellow};
+    private Color[] colors = {Color.black, Color.blue, Color.red, Color.green, Color.white, Color.yellow, new Color(0,70,42)};
     private ViewController viewController;
 
     public ColorPalette() {
