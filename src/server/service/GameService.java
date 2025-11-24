@@ -5,22 +5,20 @@ import server.domain.AnsweringState;
 import server.domain.DrawingState;
 import server.domain.Player;
 import server.repository.QuizWordRepository;
-
-import java.util.List;
 import java.util.Map;
 
 public class GameService {
-    public void startGame(GameRoom gameRoom) {
-        gameRoom.broadcastToRoom("[System] 게임이 시작되었습니다!");
-        nextRound(gameRoom);
-    }
-
     // 정답 당 10점씩 올라가는걸로 일단 구현할게요
     private static final int SCORE_PER_ANSWER = 10;
     private final QuizWordRepository quizWordRepository;
 
     public GameService(QuizWordRepository quizWordRepository) {
         this.quizWordRepository = quizWordRepository;
+    }
+
+    public void startGame(GameRoom gameRoom) {
+        gameRoom.broadcastToRoom("[System] 게임이 시작되었습니다!");
+        nextRound(gameRoom);
     }
 
     // 점수 관리
@@ -61,7 +59,6 @@ public class GameService {
 
         // 점수 추가
         addScore(gameRoom, player);
-
         // 다음 라운드 진행
         nextRound(gameRoom);
     }
@@ -70,7 +67,7 @@ public class GameService {
         // 다음 그림 그리는 사람 선택
         Player newDrawer = gameRoom.selectNextDrawer();
         gameRoom.setDrawer(newDrawer);
-        gameRoom.broadcastToRoom("ERASE");
+        gameRoom.broadcastToRoom("ERASE:");
 
         // 사용자 업데이트
         updatePlayerStates(gameRoom, newDrawer);

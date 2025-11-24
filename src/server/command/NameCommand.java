@@ -9,7 +9,6 @@ public class NameCommand implements Command {
 
     @Override
     public void create(String data, Player player) {
-        System.out.println("----------");
         String[] tokens = data.split(":");
         this.data = tokens[1];
     }

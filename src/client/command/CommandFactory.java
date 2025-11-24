@@ -35,9 +35,7 @@ public class CommandFactory {
 
         Command commandProcessor = commandMap.get(tokens[0]);
 
-        if (commandProcessor == null) {
-            viewController.updateChatPanel(msg);
-        }
+        if (commandProcessor == null) viewController.updateChatPanel(msg);
         else commandProcessor.execute(viewController, data);
     }
 

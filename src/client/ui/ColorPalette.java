@@ -1,9 +1,9 @@
 package client.ui;
 
+import client.controller.GameController;
 import client.controller.ViewController;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,8 +11,9 @@ import java.awt.event.ActionListener;
 //빨강, 파랑, 초록, 노랑, 검정, 하양
 public class ColorPalette extends JPanel {
 
-    private Color[] colors = {Color.black, Color.blue, Color.red, Color.green, Color.white, Color.yellow, new Color(0,70,42)};
-    private ViewController viewController;
+    private Color[] colors = {Color.black, Color.darkGray, Color.lightGray, Color.red, Color.orange, Color.yellow, Color.green, new Color(0,70,42),
+            Color.cyan, Color.blue, Color.white};
+    private GameController gameController;
 
     public ColorPalette() {
         setPreferredSize(new Dimension(30,150));
@@ -38,9 +39,7 @@ public class ColorPalette extends JPanel {
 
     public void sendCurrentColor(Color c) {
         String colorCode = String.valueOf(c.getRGB());
-        viewController.sendColor(colorCode);
+        gameController.sendColor(colorCode);
     }
-    public void setViewController(ViewController viewController) {
-        this.viewController = viewController;
-    }
+    public void setGameController(GameController gameController) {this.gameController = gameController;}
 }

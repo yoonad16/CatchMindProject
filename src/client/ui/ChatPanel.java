@@ -1,5 +1,6 @@
 package client.ui;
 
+import client.controller.GameController;
 import client.controller.ViewController;
 
 import javax.swing.*;
@@ -13,11 +14,7 @@ public class ChatPanel extends JPanel{
 
     public JTextArea textArea;
     public JTextField inputText;
-    private JButton leaveButton;
-
-    private JPanel gamePanel;
-
-    private ViewController viewController;
+    private GameController gameController;
 
     public ChatPanel() {
         setSize(300,500);
@@ -48,44 +45,22 @@ public class ChatPanel extends JPanel{
     public void updateTextArea(String msg) {
         this.textArea.append(msg+"\n");
     }
-    public void exitRoom() {this.viewController.exitRoom();}
+    public void exitRoom() {this.gameController.exitRoom();}
 
     public void enableChatInput() {inputText.addActionListener(chatting);}
     public void disableChatInput() {inputText.removeActionListener(chatting);}
-    public void setViewController (ViewController viewController) {
-        this.viewController = viewController;
-    }
-
-//    KeyListener chat = new KeyListener() {
-//        @Override
-//        public void keyTyped(KeyEvent e) {
-//
-//        }
-//        @Override
-//        public void keyPressed(KeyEvent e) {
-//            if (e.getKeyChar() == KeyEvent.VK_ENTER){
-//                String msg = "CHAT:"+inputText.getText();
-//                viewController.sendChat(msg);
-//            }
-//        }
-//        @Override
-//        public void keyReleased(KeyEvent e) {
-//            if (e.getKeyChar() == KeyEvent.VK_ENTER){
-//                inputText.setText("");
-//            }
-//        }
-//    };
 
     ActionListener chatting = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             String text = inputText.getText();
             if (!text.trim().isEmpty()) {
-                String msg = "CHAT:" + text;
-                viewController.sendChat(msg);
+                gameController.sendChat(text);
 
                 inputText.setText("");
             }
         }
     };
+
+    public void setGameController(GameController gameController) {this.gameController = gameController;}
 }

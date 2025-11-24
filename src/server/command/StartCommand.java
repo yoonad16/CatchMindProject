@@ -9,14 +9,12 @@ public class StartCommand implements Command {
 
     @Override
     public void execute(GameRoom gameRoom, Player player) {
-        System.out.println("start command execute");
         gameRoom.broadcastToRoom(data);
         gameRoom.getGameService().startGame(gameRoom);
     }
 
     @Override
     public void create(String data, Player player) {
-        System.out.println("start command create");
         this.data = data;
     }
 }

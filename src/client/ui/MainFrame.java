@@ -1,5 +1,6 @@
 package client.ui;
 
+import client.controller.GameController;
 import client.controller.ViewController;
 import com.sun.tools.javac.Main;
 
@@ -50,10 +51,9 @@ public class MainFrame extends JFrame {
         this.chatPanel.updateTextArea(msg);
     }
 
-    public void setViewController (ViewController viewController) {
-        chatPanel.setViewController(viewController);
-        canvasPanel.setViewController(viewController);
-        gamePanel.setViewController(viewController);
+    public void setGameController (GameController gameController) {
+        canvasPanel.setGameController(gameController);
+        gamePanel.setGameController(gameController);
     }
 
     public void enablePanel() {
@@ -63,16 +63,11 @@ public class MainFrame extends JFrame {
     public void updateCanvas(Point from, Point to) {
         canvasPanel.paintCanvas(from, to);
     }
-
-    public void updateCurrentColor (String msg) {
-        System.out.println("in mainframe");this.canvasPanel.updateColor(msg);}
-
+    public void updateCurrentColor (String msg) {this.canvasPanel.updateColor(msg);}
     public void eraseCanvas() {
         canvasPanel.eraseCanvas();
     }
-
     public void disableStartButton() {gamePanel.disableStartButton();}
-
     public void disableDrawing() {canvasPanel.disableCanvasDrawing();}
     public void enableDrawing() {canvasPanel.enalbeCanvasDrawing();}
     public void disableChatting() {chatPanel.disableChatInput();}

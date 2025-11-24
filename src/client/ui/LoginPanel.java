@@ -1,6 +1,7 @@
 package client.ui;
 
 import client.ClientTest;
+import client.controller.GameController;
 import client.controller.ViewController;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public class LoginPanel extends JFrame {
     private JTextField nameField;
     private JTextField ipField;
     private ViewController viewController;
+    private GameController gameController;
 
     public LoginPanel() {
         setSize(800,500);
@@ -36,7 +38,7 @@ public class LoginPanel extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String ip = ipField.getText();
                 String name = nameField.getText();
-                viewController.accessGame(ip, name);
+                gameController.accessGame(ip, name);
                 accessSuccess();
             }
         });
@@ -86,5 +88,6 @@ public class LoginPanel extends JFrame {
     }
 
     public void setViewController(ViewController viewController) {this.viewController = viewController;}
+    public void setGameController(GameController gameController) {this.gameController = gameController;}
     public void accessSuccess(){this.dispose();}
 }

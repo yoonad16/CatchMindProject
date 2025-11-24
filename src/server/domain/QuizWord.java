@@ -1,6 +1,6 @@
 package server.domain;
 
-public class QuizWord {
+public class   QuizWord {
     //퀴즈단어 객체 필드 참고 (아마 word정도 쓸 듯..?)
     private int id;
     private String word;

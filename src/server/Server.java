@@ -2,7 +2,6 @@ package server;
 
 import server.controller.ConnectionController;
 import server.controller.GameRoom;
-import server.service.DrawService;
 import server.service.GameService;
 import server.repository.QuizWordRepository;
 
@@ -17,12 +16,10 @@ public class Server extends Thread{
 	private ServerSocket serverSocket;
     private final List<ConnectionController> clients = new ArrayList<>();
     private final List<GameRoom> gameRooms = new ArrayList<>();
-    private DrawService drawService;
     private GameService gameService;
     private QuizWordRepository quizWordRepository;
 
     public Server(){
-        this.drawService = new DrawService();
         this.quizWordRepository = new QuizWordRepository();
         this.gameService = new GameService(this.quizWordRepository);
     }
@@ -54,7 +51,7 @@ public class Server extends Thread{
     }
 
     public void makeGameRoom() {
-        GameRoom newGameRoom = new GameRoom(drawService, gameService);
+        GameRoom newGameRoom = new GameRoom(gameService);
         this.gameRooms.add(newGameRoom);
     }
 

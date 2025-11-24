@@ -2,7 +2,6 @@ package server.command;
 
 import server.controller.GameRoom;
 import server.domain.Player;
-import server.service.DrawService;
 
 public class DrawCommand implements Command {
     private String message;

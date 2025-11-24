@@ -1,5 +1,6 @@
 package client.ui;
 
+import client.controller.GameController;
 import client.controller.ViewController;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ public class GamePanel extends JPanel {
     private JButton startButton;
 
     private ViewController viewController;
+    private GameController gameController;
 
     private JPanel gamePanel;
     public GamePanel() {
@@ -23,7 +25,7 @@ public class GamePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("버튼 눌림");
-                viewController.noticeStart();
+                gameController.noticeStart();
             }
         });
 
@@ -31,7 +33,7 @@ public class GamePanel extends JPanel {
         leaveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                viewController.exitRoom();
+                gameController.exitRoom();
             }
         });
 
@@ -45,4 +47,5 @@ public class GamePanel extends JPanel {
     public void setViewController(ViewController viewController) {
         this.viewController = viewController;
     }
+    public void setGameController(GameController gameController) {this.gameController = gameController;}
 }

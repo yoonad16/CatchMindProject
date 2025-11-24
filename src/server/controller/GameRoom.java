@@ -2,24 +2,21 @@ package server.controller;
 
 import server.command.CommandFactory;
 import server.domain.Player;
-import server.service.DrawService;
 import server.service.GameService;
 
 import java.util.*;
 
 public class GameRoom {
     private final List<Player> players = new ArrayList<>();
-    private String currentWord = "집";
+    private String currentWord;
     private Player drawer;
     Timer gameTimer;
     Map<Player, Integer> scoreBoard = new HashMap<>();
-    private final DrawService drawService;
     private final GameService gameService;
     private final CommandFactory commandFactory = CommandFactory.getInstance();
 
-    public GameRoom (DrawService drawService, GameService gameService) {
+    public GameRoom (GameService gameService) {
         this.gameService = gameService;
-        this.drawService = drawService;
     }
 
 
@@ -29,9 +26,6 @@ public class GameRoom {
         scoreBoard.put(p, 0); // 점수 초기값 = 0
         if(drawer == null) {
             drawer = p; // 첫번째로 들어오는 사람 자동으로 drawer 배정
-        }
-        if (players.size() == 1) {
-//            gameService.startGame(this);
         }
     }
     public void removePlayer(Player p) {
@@ -47,7 +41,6 @@ public class GameRoom {
         commandFactory.createCommand(this, msg, player);
     }
 
-    //브로드캐스트 메소드-아마 건드릴거 없을듯?
     public void broadcastToRoom (String msg) {
         for(Player p : players) {
             p.sendMessage(msg);
@@ -77,6 +70,5 @@ public class GameRoom {
     public Player getDrawer () {return this.drawer;}
     public Map<Player, Integer> getScoreBoard() {return scoreBoard;}
     public List<Player> getPlayers () {return this.players;}
-    public DrawService getDrawService() {return this.drawService;}
     public GameService getGameService() {return this.gameService;}
 }

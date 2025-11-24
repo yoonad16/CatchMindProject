@@ -1,5 +1,6 @@
 package client.ui;
 
+import client.controller.GameController;
 import client.controller.ViewController;
 
 import javax.swing.*;
@@ -12,7 +13,7 @@ public class CanvasPanel extends JPanel {
     private ColorPalette colorPalette;
     private JTextField keyword;
     private Point lastPoint = null;
-    private ViewController viewController;
+    private GameController gameController;
     private JButton eraseButton;
     private Color currentColor = Color.BLACK;
 
@@ -41,39 +42,29 @@ public class CanvasPanel extends JPanel {
         add(eraseButton,BorderLayout.SOUTH);
     }
 
+
+    //브로드캐스트 수신 시: 캔버스 그림 그려지기 & 지우기
     public void paintCanvas (Point from, Point to ) {
         Graphics2D g2 = (Graphics2D) canvas.getGraphics();
         g2.setStroke(new BasicStroke(3));
         g2.setColor(currentColor);
         g2.drawLine(from.x, from.y, to.x, to.y);
     }
-
-    public void sendCanvas (Point from, Point to) {
-        viewController.sendDrawing(from,to);
-    }
-
     public void eraseCanvas() {
         this.canvas.repaint();
     }
 
-    public void sendErase() {
-        viewController.sendErase("ERASE:");
+    //그림 내용 서버에 전송하기 (지우기 & 그리기)
+    public void sendCanvas (Point from, Point to) {
+        gameController.sendDrawing(from,to);
     }
+    public void sendErase() {gameController.sendErase();}
 
-    public void updateColor(String msg) {
-        System.out.println("color update in canvaspanel");this.currentColor = new Color(Integer.parseInt(msg));}
-
-    public void setKeyword(String word) {
-        System.out.println("[DEBUG] 화면 갱신 요청 받음: " + word);
-        keyword.setText("제시어: " +word);
-    }
-
+    //수신한 메시지에 따라 화면 업데이트
+    public void updateColor(String msg) {this.currentColor = new Color(Integer.parseInt(msg));}
+    public void setKeyword(String word) {keyword.setText("제시어: " +word);}
     public void emptyKeyWord(String word) {
         keyword.setText("제시어: ???");
-    }
-    public void setViewController(ViewController viewController) {
-        this.viewController = viewController;
-        this.colorPalette.setViewController(viewController);
     }
 
     public void disableCanvasDrawing() {
@@ -117,4 +108,9 @@ public class CanvasPanel extends JPanel {
             sendErase();
         }
     };
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+        this.colorPalette.setGameController(gameController);
+    }
 }
