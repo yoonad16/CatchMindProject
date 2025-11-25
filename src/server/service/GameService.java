@@ -96,7 +96,6 @@ public class GameService {
         } else {
             System.out.println("[DEBUG] 그림 그리는 사람이 없어서 전송 못함");
         }
-
         return nextWord;
     }
 
@@ -113,7 +112,6 @@ public class GameService {
                 p.sendMessage("DRAWSTATE:false");
 
                 p.sendMessage("KEYWORD:???");
-
             }
         }
     }
