@@ -2,10 +2,7 @@ package client.controller;
 
 import client.Client;
 import client.ui.MainFrame;
-
 import java.awt.*;
-
-import static java.lang.System.exit;
 
 //중계자: 클라이언트-UI 연결하고 중계
 public class ViewController {
@@ -49,5 +46,13 @@ public class ViewController {
         System.out.println("서버와의 연결이 종료됩니다.");
         client.disconnect();
         System.exit(0);
+    }
+
+    public void startTimer(int timeLimit) {
+        mainFrame.startTimer(timeLimit);
+    }
+
+    public void stopTimer() {
+        mainFrame.stopTimer();
     }
 }

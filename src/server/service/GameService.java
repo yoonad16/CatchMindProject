@@ -1,12 +1,11 @@
 package server.service;
 
+import java.util.List;
 import server.controller.GameRoom;
 import server.domain.AnsweringState;
 import server.domain.DrawingState;
 import server.domain.Player;
 import server.repository.QuizWordRepository;
-
-import java.util.List;
 
 public class GameService {
     private final QuizWordRepository quizWordRepository;
@@ -67,17 +66,58 @@ public class GameService {
 
     //📌맞았을 때 로직: 점수 올리기, 제시어 바꾸기, 그림그리는 사람 바꾸기 등
     public void correctAnswer(Player player, GameRoom gameRoom) {
-        // 아직 점수구현 안함
+        // 타이머 취소 (정답을 맞췄으므로)
+        gameRoom.cancelDrawingTimer();
 
-        // 다음 화가 선택
-        Player newDrawer = selectNextDrawer(gameRoom);
+        // 다음 라운드 진행
+        nextRound(gameRoom);
+    }
+    
+    // 다음 라운드 준비
+    public void nextRound(GameRoom gameRoom) {
+        // 다음 그림 그리는 사람 선택
+        Player newDrawer = gameRoom.selectNextDrawer();
         if(newDrawer == null){
             return;
         }
         gameRoom.setDrawer(newDrawer);
 
-
         // 사용자 상태 업데이트
+        updatePlayerStates(gameRoom, newDrawer);
+
+        // 제시어 변경
+        String newWord = changeWord(gameRoom);
+
+        for (Player p : gameRoom.getPlayers()) {
+            if (!p.equals(gameRoom.getDrawer()))
+                p.sendMessage("[System] 새로운 라운드가 시작되었습니다!");
+        }
+        gameRoom.broadcastToRoom("다음 그림 그리는 사람은 "+newDrawer.getName()+"님 입니다.");
+
+        // 그림 그리기 타이머 시작 (30초)
+        gameRoom.startDrawingTimer();
+    }
+    
+    // 제시어 바꾸기
+    private String changeWord(GameRoom gameRoom) {
+        String nextWord = getNewQuizWord();
+        gameRoom.setCurrentWord(nextWord);
+
+        System.out.println("[DEBUG] 현재 그림 그리는 사람: " + gameRoom.getDrawer().getName());
+        System.out.println("[DEBUG] 선정된 단어: " + nextWord);
+
+        if (gameRoom.getDrawer() != null) {
+            gameRoom.getDrawer().sendMessage("KEYWORD:" + nextWord);
+            System.out.println("[DEBUG] 서버 -> 클라이언트 전송 완료: KEYWORD:" + nextWord);
+        } else {
+            System.out.println("[DEBUG] 그림 그리는 사람이 없어서 전송 못함");
+        }
+
+        return nextWord;
+    }
+
+    // 사용자 상태 업데이트
+    public void updatePlayerStates(GameRoom gameRoom, Player newDrawer) {
         for(Player p: gameRoom.getPlayers()){
             if(p.equals(newDrawer))
                 p.setState(new DrawingState());
