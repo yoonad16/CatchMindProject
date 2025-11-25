@@ -1,11 +1,10 @@
 package server.controller;
 
+import java.util.*;
 import server.command.CommandFactory;
 import server.domain.Player;
 import server.service.DrawService;
 import server.service.GameService;
-
-import java.util.*;
 
 public class GameRoom {
     private final List<Player> players = new ArrayList<>();
@@ -37,6 +36,16 @@ public class GameRoom {
     public void removePlayer(Player p) {
         players.remove(p);
         scoreBoard.remove(p);
+        
+        // drawer가 나간 경우 다음 drawer 선택
+        if (drawer != null && drawer.equals(p)) {
+            if (players.isEmpty()) {
+                drawer = null;
+            } else {
+                drawer = selectNextDrawer();
+            }
+        }
+        
         broadcastToRoom(p.getName()+"님이 방을 나가셨습니다.");
         System.out.println(p.getName()+"님이 방을 나가셨습니다.");
     }
@@ -58,9 +67,14 @@ public class GameRoom {
     // GameService에 두면 player, drawer 계속 참조해야해서 객체 간 결합도 증가해서 옮겼다~~라고 쓰면될듯
 
     public Player selectNextDrawer() {
+        if (players.isEmpty()) {
+            return null;
+        }
+        
         if (drawer == null) {
             return players.get(0);
         }
+        
         int currentIndex = players.indexOf(drawer);
 
         if (currentIndex == -1)

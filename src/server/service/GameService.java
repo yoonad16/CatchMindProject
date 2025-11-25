@@ -1,13 +1,11 @@
 package server.service;
 
+import java.util.Map;
 import server.controller.GameRoom;
 import server.domain.AnsweringState;
 import server.domain.DrawingState;
 import server.domain.Player;
 import server.repository.QuizWordRepository;
-
-import java.util.List;
-import java.util.Map;
 
 public class GameService {
     public void startGame(GameRoom gameRoom) {
@@ -33,7 +31,7 @@ public class GameService {
         if (currentScore == null)
             currentScore = 0;
 
-        board.put(player, board.get(player) + SCORE_PER_ANSWER);
+        board.put(player, currentScore + SCORE_PER_ANSWER);
     }
 
     public int getPlayerScore(GameRoom gameRoom, Player player) {
@@ -69,6 +67,12 @@ public class GameService {
     private void nextRound(GameRoom gameRoom) {
         // 다음 그림 그리는 사람 선택
         Player newDrawer = gameRoom.selectNextDrawer();
+        
+        if (newDrawer == null) {
+            gameRoom.broadcastToRoom("[System] 플레이어가 없어 게임을 진행할 수 없습니다.");
+            return;
+        }
+        
         gameRoom.setDrawer(newDrawer);
         gameRoom.broadcastToRoom("ERASE");
 

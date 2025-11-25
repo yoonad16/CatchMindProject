@@ -1,13 +1,9 @@
 package client.controller;
 
 import client.Client;
-import client.command.Command;
 import client.command.CommandFactory;
 import client.ui.MainFrame;
-
 import java.awt.*;
-
-import static java.lang.System.exit;
 
 //중계자: 클라이언트-UI 연결하고 중계
 public class ViewController {

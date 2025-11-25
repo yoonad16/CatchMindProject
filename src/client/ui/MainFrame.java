@@ -1,10 +1,8 @@
 package client.ui;
 
 import client.controller.ViewController;
-import com.sun.tools.javac.Main;
-
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class MainFrame extends JFrame {
 
