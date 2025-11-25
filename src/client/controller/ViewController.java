@@ -47,6 +47,10 @@ public class ViewController {
     }
     public void updateCurrentColor(String colorCode) {
         System.out.println("update color in controller");mainFrame.updateCurrentColor(colorCode);}
+    
+    public void updateTimer(int time) {
+        mainFrame.updateTimer(time);
+    }
 
     //여기서 객체 생성 하지 말고 DI 의존성 주입 하기 (메인 클래스의 메소드에서 생성해서 세팅하기)
     public void accessGame(String ip, String name) {

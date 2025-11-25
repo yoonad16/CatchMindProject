@@ -64,7 +64,10 @@ public class GameService {
         nextRound(gameRoom);
     }
     // 다음 라운드 준비
-    private void nextRound(GameRoom gameRoom) {
+    public void nextRound(GameRoom gameRoom) {
+        // 기존 타이머 중지
+        gameRoom.stopTimer();
+        
         // 다음 그림 그리는 사람 선택
         Player newDrawer = gameRoom.selectNextDrawer();
         
@@ -87,6 +90,9 @@ public class GameService {
                 p.sendMessage("[System] 새로운 라운드가 시작되었습니다!");
         }
         gameRoom.broadcastToRoom("다음 그림 그리는 사람은 "+newDrawer.getName()+"님 입니다.");
+        
+        // 타이머 시작
+        gameRoom.startTimer();
 
     }
     // 제시어 바꾸기

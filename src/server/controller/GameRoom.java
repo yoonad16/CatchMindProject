@@ -11,6 +11,7 @@ public class GameRoom {
     private String currentWord = "집";
     private Player drawer;
     Timer gameTimer;
+    private int remainingTime = 30;
     Map<Player, Integer> scoreBoard = new HashMap<>();
     private final DrawService drawService;
     private final GameService gameService;
@@ -93,4 +94,37 @@ public class GameRoom {
     public List<Player> getPlayers () {return this.players;}
     public DrawService getDrawService() {return this.drawService;}
     public GameService getGameService() {return this.gameService;}
+    
+    // 타이머 관련 메소드
+    public void startTimer() {
+        // 기존 타이머가 있으면 취소
+        if (gameTimer != null) {
+            gameTimer.cancel();
+        }
+        
+        remainingTime = 30;
+        gameTimer = new Timer();
+        
+        gameTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (remainingTime > 0) {
+                    broadcastToRoom("TIMER:" + remainingTime);
+                    remainingTime--;
+                } else {
+                    // 시간 종료 시 다음 라운드로
+                    gameTimer.cancel();
+                    broadcastToRoom("[System] 시간이 종료되었습니다!");
+                    gameService.nextRound(GameRoom.this);
+                }
+            }
+        }, 0, 1000); // 0초 후 시작, 1초마다 실행
+    }
+    
+    public void stopTimer() {
+        if (gameTimer != null) {
+            gameTimer.cancel();
+            gameTimer = null;
+        }
+    }
 }

@@ -78,4 +78,8 @@ public class MainFrame extends JFrame {
     public void updateKeyWord(String word) {
         this.canvasPanel.setKeyword(word);
     }
+    
+    public void updateTimer(int time) {
+        this.canvasPanel.updateTimer(time);
+    }
 }
