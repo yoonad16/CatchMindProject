@@ -5,7 +5,26 @@ import server.domain.AnsweringState;
 import server.domain.DrawingState;
 import server.domain.Player;
 
-public class StateService {
+import java.util.List;
+
+public class DrawerService {
+
+    public Player selectNextDrawer(List<Player> players, Player drawer) {
+        if (players.isEmpty()) {
+            return null;
+        }
+
+        if (drawer == null) {
+            return players.get(0);
+        }
+
+        int currentIndex = players.indexOf(drawer);
+
+        if (currentIndex == -1)
+            return players.get(0);
+
+        return players.get((currentIndex + 1) % players.size());
+    }
 
     public void updatePlayerStates(GameRoom gameRoom, Player newDrawer) {
         for(Player p: gameRoom.getPlayers()){

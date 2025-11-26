@@ -1,7 +1,6 @@
 package server.domain;
 
 import server.MessageSender;
-import server.controller.ConnectionController;
 
 public class Player {
     private String name;
@@ -23,7 +22,11 @@ public class Player {
     }
 
     public void sendMessage(String msg) {
-        messageSender.send(msg);
+        if (messageSender != null) {
+            messageSender.send(msg);
+        } else {
+            System.err.println("[WARNING] " + name + "의 messageSender가 null입니다. 메시지 전송 실패: " + msg);
+        }
     }
 
     //Getter & Setter

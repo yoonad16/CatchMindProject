@@ -5,14 +5,23 @@ import server.domain.AnsweringState;
 import server.domain.DrawingState;
 import server.domain.Player;
 import server.repository.QuizWordRepository;
+
+import java.util.List;
 import java.util.Map;
 
 public class GameService {
     // 정답 당 10점씩 올라가는걸로 일단 구현할게요
     private static final int SCORE_PER_ANSWER = 10;
+    private final DrawerService drawerService;
+    private final GameWordService gameWordService;
+    private final CheckAnswerService checkAnswerService;
     private final QuizWordRepository quizWordRepository;
 
-    public GameService(QuizWordRepository quizWordRepository) {
+    public GameService(DrawerService drawerService, GameWordService gameWordService,
+                       CheckAnswerService checkAnswerService, QuizWordRepository quizWordRepository) {
+        this.drawerService = drawerService;
+        this.gameWordService = gameWordService;
+        this.checkAnswerService = checkAnswerService;
         this.quizWordRepository = quizWordRepository;
     }
 
@@ -21,17 +30,13 @@ public class GameService {
         nextRound(gameRoom);
     }
 
-    // 점수 관리
-
-    // 정답 맞춘 플레이어에게 점수 주기
-    public void addScore(GameRoom gameRoom, Player player) {
-        Map<Player, Integer> board = gameRoom.getScoreBoard();
-        Integer currentScore = board.get(player);
-
-        if (currentScore == null)
-            currentScore = 0;
-
-        board.put(player, board.get(player) + SCORE_PER_ANSWER);
+    public void checkAnswer(GameRoom room, Player sender, String data) {
+        String message = "CHAT:";
+        if (checkAnswerService.correctAnswer(room, sender, data)) {
+            nextRound(room);
+        }
+        message += "[" + sender.getName() + "] "+data;
+        room.broadcastToRoom(message);
     }
 
     public int getPlayerScore(GameRoom gameRoom, Player player) {
@@ -43,37 +48,24 @@ public class GameService {
 
     }
 
-    //답 맞는지 체크하는 메소드
-    public boolean compareWord (GameRoom gameRoom,String word) {
-        String correctWord = gameRoom.getCurrentWord();
-        if(correctWord == null || word == null)
-            return false;
-        return word.equalsIgnoreCase(correctWord);
-    }
-
-    // 맞았을 때 로직: 점수 올리기, 제시어 바꾸기, 그림그리는 사람 바꾸기 등.. => SRP 위반 => 기능별로 메소드 분리함
-    public void correctAnswer(Player player, GameRoom gameRoom, String msg) {
-
-        gameRoom.broadcastToRoom("[" + player.getName() + "]: " + msg);
-        gameRoom.broadcastToRoom("[System] " + player.getName() + "님이 정답을 맞추셨습니다! (+" + SCORE_PER_ANSWER + "점)");
-
-        // 점수 추가
-        addScore(gameRoom, player);
-        // 다음 라운드 진행
-        nextRound(gameRoom);
-    }
     // 다음 라운드 준비
-    private void nextRound(GameRoom gameRoom) {
+    public void nextRound(GameRoom gameRoom) {
         // 다음 그림 그리는 사람 선택
-        Player newDrawer = gameRoom.selectNextDrawer();
+        Player newDrawer = drawerService.selectNextDrawer(gameRoom.getPlayers(), gameRoom.getDrawer());
+
+        if (newDrawer == null) {
+            gameRoom.broadcastToRoom("[System] 플레이어가 없어 게임을 진행할 수 없습니다.");
+            return;
+        }
+
         gameRoom.setDrawer(newDrawer);
         gameRoom.broadcastToRoom("ERASE:");
 
         // 사용자 업데이트
-        updatePlayerStates(gameRoom, newDrawer);
+        drawerService.updatePlayerStates(gameRoom, newDrawer);
 
         // 제시어 변경
-        String newWord = changeWord(gameRoom);
+        changeWord(gameRoom);
 
         for (Player p : gameRoom.getPlayers()) {
             if (!p.equals(gameRoom.getDrawer()))
@@ -82,43 +74,13 @@ public class GameService {
         gameRoom.broadcastToRoom("다음 그림 그리는 사람은 "+newDrawer.getName()+"님 입니다.");
 
     }
+
+    public Player selectNextDrawer(GameRoom room) {
+        return drawerService.selectNextDrawer(room.getPlayers(), room.getDrawer());
+    }
     // 제시어 바꾸기
-    private String changeWord(GameRoom gameRoom) {
-        String nextWord = getNewQuizWord();
+    private void changeWord(GameRoom gameRoom) {
+        String nextWord = gameWordService.changeWord(gameRoom, quizWordRepository);
         gameRoom.setCurrentWord(nextWord);
-
-        System.out.println("[DEBUG] 현재 그림 그리는 사람: " + gameRoom.getDrawer().getName());
-        System.out.println("[DEBUG] 선정된 단어: " + nextWord);
-
-        if (gameRoom.getDrawer() != null) {
-            gameRoom.getDrawer().sendMessage("KEYWORD:" + nextWord);
-            System.out.println("[DEBUG] 서버 -> 클라이언트 전송 완료: KEYWORD:" + nextWord);
-        } else {
-            System.out.println("[DEBUG] 그림 그리는 사람이 없어서 전송 못함");
-        }
-        return nextWord;
-    }
-
-    // 사용자 상태 업데이트
-    public void updatePlayerStates(GameRoom gameRoom, Player newDrawer) {
-        for(Player p: gameRoom.getPlayers()){
-            if(p.equals(newDrawer)) {
-                p.setState(new DrawingState());
-
-                p.sendMessage("DRAWSTATE:true");
-            } else {
-                p.setState(new AnsweringState());
-
-                p.sendMessage("DRAWSTATE:false");
-
-                p.sendMessage("KEYWORD:???");
-            }
-        }
-    }
-
-    // 제시어 새로 가져오기
-    public String getNewQuizWord() {
-        String quizWord = quizWordRepository.getRandomWord();
-        return quizWord;
     }
 }

@@ -2,8 +2,11 @@ package server;
 
 import server.controller.ConnectionController;
 import server.controller.GameRoom;
+import server.service.CheckAnswerService;
+import server.service.DrawerService;
 import server.service.GameService;
 import server.repository.QuizWordRepository;
+import server.service.GameWordService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -17,11 +20,20 @@ public class Server extends Thread{
     private final List<ConnectionController> clients = new ArrayList<>();
     private final List<GameRoom> gameRooms = new ArrayList<>();
     private GameService gameService;
+    private CheckAnswerService checkAnswerService;
+    private DrawerService drawerService;
+    private GameWordService gameWordService;
     private QuizWordRepository quizWordRepository;
 
     public Server(){
         this.quizWordRepository = new QuizWordRepository();
-        this.gameService = new GameService(this.quizWordRepository);
+
+        this.checkAnswerService = new CheckAnswerService();
+        this.drawerService = new DrawerService();
+        this.gameWordService = new GameWordService();
+
+        this.gameService = new GameService(this.drawerService, this.gameWordService,
+                this.checkAnswerService, this.quizWordRepository);
     }
 
     public void run() {

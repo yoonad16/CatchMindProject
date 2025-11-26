@@ -21,9 +21,6 @@ public class ChatCommand implements Command{
     public void execute(GameRoom gameRoom, Player player) {
         String message = header + "[" + player.getName()+ "] " +data;
         GameService gameService = gameRoom.getGameService();
-        if (gameService.compareWord(gameRoom, data)) {
-            gameService.correctAnswer(player, gameRoom, data);
-        }
-        gameRoom.broadcastToRoom(message);
+        gameService.checkAnswer(gameRoom, player, data);
     }
 }

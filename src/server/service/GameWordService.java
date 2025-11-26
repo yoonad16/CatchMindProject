@@ -4,15 +4,13 @@ import server.controller.GameRoom;
 import server.repository.QuizWordRepository;
 
 public class GameWordService {
-    private QuizWordRepository quizWordRepository;
-
-    public String getNewQuizWord() {
+    public String getNewQuizWord(QuizWordRepository quizWordRepository) {
         String quizWord = quizWordRepository.getRandomWord();
         return quizWord;
     }
 
-    private String changeWord(GameRoom gameRoom) {
-        String nextWord = getNewQuizWord();
+    public String changeWord(GameRoom gameRoom, QuizWordRepository quizWordRepository) {
+        String nextWord = getNewQuizWord(quizWordRepository);
         gameRoom.setCurrentWord(nextWord);
 
         System.out.println("[DEBUG] 현재 그림 그리는 사람: " + gameRoom.getDrawer().getName());
@@ -27,6 +25,4 @@ public class GameWordService {
 
         return nextWord;
     }
-
-    public void setQuizWordRepository(QuizWordRepository quizWordRepository) { this.quizWordRepository = quizWordRepository;}
 }
