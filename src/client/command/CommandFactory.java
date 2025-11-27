@@ -17,6 +17,7 @@ public class CommandFactory {
         commandMap.put("DRAWSTATE", new DrawStateCommand());
         commandMap.put("KEYWORD", new KeywordCommand());
         commandMap.put("COLOR", new ColorCommand());
+        commandMap.put("TIMER", new TimerCommand());
     }
 
     public static CommandFactory getInstance() {

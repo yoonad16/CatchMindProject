@@ -10,6 +10,7 @@ public class GameController {
     private String currentWord;
     private Player drawer;
     Timer gameTimer;
+    private int remainingTime = 30;
     Map<Player, Integer> scoreBoard = new HashMap<>();
     private final GameService gameService;
     private final CommandFactory commandFactory = CommandFactory.getInstance();
@@ -30,7 +31,7 @@ public class GameController {
     public void removePlayer(Player p) {
         players.remove(p);
         scoreBoard.remove(p);
-        
+
         // drawer가 나간 경우 다음 drawer 선택
         if (drawer != null && drawer.equals(p)) {
             if (players.isEmpty()) {
@@ -39,7 +40,7 @@ public class GameController {
                 drawer = gameService.selectNextDrawer(this);
             }
         }
-        
+
         broadcastToRoom(p.getName()+"님이 방을 나가셨습니다.");
         System.out.println(p.getName()+"님이 방을 나가셨습니다.");
     }
@@ -64,4 +65,37 @@ public class GameController {
     public Map<Player, Integer> getScoreBoard() {return scoreBoard;}
     public List<Player> getPlayers () {return this.players;}
     public GameService getGameService() {return this.gameService;}
+
+    // 타이머 관련 메소드
+    public void startTimer() {
+        // 기존 타이머가 있으면 취소
+        if (gameTimer != null) {
+            gameTimer.cancel();
+        }
+
+        remainingTime = 30;
+        gameTimer = new Timer();
+
+        gameTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (remainingTime > 0) {
+                    broadcastToRoom("TIMER:" + remainingTime);
+                    remainingTime--;
+                } else {
+                    // 시간 종료 시 다음 라운드로
+                    gameTimer.cancel();
+                    broadcastToRoom("[System] 시간이 종료되었습니다!");
+                    gameService.nextRound(GameController.this);
+                }
+            }
+        }, 0, 1000); // 0초 후 시작, 1초마다 실행
+    }
+
+    public void stopTimer() {
+        if (gameTimer != null) {
+            gameTimer.cancel();
+            gameTimer = null;
+        }
+    }
 }

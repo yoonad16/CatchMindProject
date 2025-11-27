@@ -45,6 +45,7 @@ public class GameService {
 
     // 다음 라운드 준비
     public void nextRound(GameController gameController) {
+        gameController.stopTimer();
         // 다음 그림 그리는 사람 선택
         Player newDrawer = drawerService.selectNextDrawer(gameController.getPlayers(), gameController.getDrawer());
 
@@ -68,6 +69,7 @@ public class GameService {
         }
         gameController.broadcastToRoom("다음 그림 그리는 사람은 "+newDrawer.getName()+"님 입니다.");
 
+        gameController.startTimer();
     }
 
     public Player selectNextDrawer(GameController room) {

@@ -12,6 +12,7 @@ public class CanvasPanel extends JPanel {
     private JPanel canvas;
     private ColorPalette colorPalette;
     private JTextField keyword;
+    private JLabel timerLabel;
     private Point lastPoint = null;
     private GameController gameController;
     private JButton eraseButton;
@@ -36,14 +37,26 @@ public class CanvasPanel extends JPanel {
         keyword.setEditable(false);
         keyword.setHorizontalAlignment(JTextField.CENTER);
 
+        // 타이머 레이블 추가 (제시어 옆)
+        timerLabel = new JLabel("⏱ --", JLabel.CENTER);
+        timerLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        timerLabel.setForeground(Color.RED);
+        timerLabel.setBackground(Color.lightGray);
+        timerLabel.setOpaque(true);
+        timerLabel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+        // 제시어와 타이머를 함께 표시하는 패널
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(Color.lightGray);
+        headerPanel.add(keyword, BorderLayout.CENTER);
+        headerPanel.add(timerLabel, BorderLayout.EAST);
+
         add(colorPalette, BorderLayout.WEST);
         add(canvas, BorderLayout.CENTER);
-        add(keyword, BorderLayout.NORTH);
+        add(headerPanel, BorderLayout.NORTH);
         add(eraseButton,BorderLayout.SOUTH);
     }
 
-
-    //브로드캐스트 수신 시: 캔버스 그림 그려지기 & 지우기
     public void paintCanvas (Point from, Point to ) {
         Graphics2D g2 = (Graphics2D) canvas.getGraphics();
         g2.setStroke(new BasicStroke(3));
@@ -60,9 +73,28 @@ public class CanvasPanel extends JPanel {
     }
     public void sendErase() {gameController.sendErase();}
 
+    public void updateTimer(int time) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                timerLabel.setText("⏱ " + time + "초");
+                if (time <= 5) {
+                    timerLabel.setForeground(Color.RED);
+                } else if (time <= 10) {
+                    timerLabel.setForeground(Color.ORANGE);
+                } else {
+                    timerLabel.setForeground(Color.BLACK);
+                }
+            }
+        });
+    }
+
     //수신한 메시지에 따라 화면 업데이트
     public void updateColor(String msg) {this.currentColor = new Color(Integer.parseInt(msg));}
-    public void setKeyword(String word) {keyword.setText("제시어: " +word);}
+    public void setKeyword(String word) {
+        System.out.println("[DEBUG] 화면 갱신 요청 받음: " + word);
+        keyword.setText("제시어: " +word);
+    }
     public void emptyKeyWord(String word) {
         keyword.setText("제시어: ???");
     }
