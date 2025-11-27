@@ -1,6 +1,6 @@
 package server.service;
 
-import server.controller.GameRoom;
+import server.controller.GameController;
 import server.domain.AnsweringState;
 import server.domain.DrawingState;
 import server.domain.Player;
@@ -26,8 +26,8 @@ public class DrawerService {
         return players.get((currentIndex + 1) % players.size());
     }
 
-    public void updatePlayerStates(GameRoom gameRoom, Player newDrawer) {
-        for(Player p: gameRoom.getPlayers()){
+    public void updatePlayerStates(GameController gameController, Player newDrawer) {
+        for(Player p: gameController.getPlayers()){
             if(p.equals(newDrawer)) {
                 p.setState(new DrawingState());
 

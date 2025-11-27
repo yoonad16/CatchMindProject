@@ -1589,7 +1589,7 @@
                                               <type>void</type>
                                               <params>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
-                                                  <name>gameRoom</name>
+                                                  <name>gameController</name>
                                                   <type>GameRoom</type>
                                                 </net.java.amateras.uml.classdiagram.model.Argument>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
@@ -1620,7 +1620,7 @@
                                               <type>void</type>
                                               <params>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
-                                                  <name>gameRoom</name>
+                                                  <name>gameController</name>
                                                   <type>GameRoom</type>
                                                 </net.java.amateras.uml.classdiagram.model.Argument>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
@@ -1655,7 +1655,7 @@
                                               <type>void</type>
                                               <params>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
-                                                  <name>gameRoom</name>
+                                                  <name>gameController</name>
                                                   <type>GameRoom</type>
                                                 </net.java.amateras.uml.classdiagram.model.Argument>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
@@ -1690,7 +1690,7 @@
                                               <type>boolean</type>
                                               <params>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
-                                                  <name>gameRoom</name>
+                                                  <name>gameController</name>
                                                   <type>GameRoom</type>
                                                 </net.java.amateras.uml.classdiagram.model.Argument>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
@@ -1725,7 +1725,7 @@
                                                   <type>Player</type>
                                                 </net.java.amateras.uml.classdiagram.model.Argument>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
-                                                  <name>gameRoom</name>
+                                                  <name>gameController</name>
                                                   <type>GameRoom</type>
                                                 </net.java.amateras.uml.classdiagram.model.Argument>
                                               </params>
@@ -1774,7 +1774,7 @@
                                               <type>Player</type>
                                               <params>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
-                                                  <name>gameRoom</name>
+                                                  <name>gameController</name>
                                                   <type>GameRoom</type>
                                                 </net.java.amateras.uml.classdiagram.model.Argument>
                                               </params>
@@ -2198,7 +2198,7 @@
                                               <type>void</type>
                                               <params>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
-                                                  <name>gameRoom</name>
+                                                  <name>gameController</name>
                                                   <type>GameRoom</type>
                                                 </net.java.amateras.uml.classdiagram.model.Argument>
                                                 <net.java.amateras.uml.classdiagram.model.Argument>
@@ -2723,7 +2723,7 @@
                                       </net.java.amateras.uml.properties.BooleanPropertyDescriptor>
                                     </propertyDescriptors>
                                     <stereoType></stereoType>
-                                    <name>server.controller.GameRoom</name>
+                                    <name>server.controller.GameController</name>
                                     <path>/CatchMindProject/src/server/controller/GameRoom.java</path>
                                     <isAbstract>false</isAbstract>
                                   </source>
@@ -2843,7 +2843,7 @@
                                     </java.beans.PropertyChangeSupport>
                                   </listeners>
                                   <visibility class="net.java.amateras.uml.classdiagram.model.Visibility$2" reference="../../../targetConnections/net.java.amateras.uml.classdiagram.model.AggregationModel[19]/source/targetConnections/net.java.amateras.uml.classdiagram.model.AggregationModel/source/children/net.java.amateras.uml.classdiagram.model.AttributeModel/visibility"/>
-                                  <name>gameRoom</name>
+                                  <name>gameController</name>
                                   <type>GameRoom</type>
                                   <isStatic>false</isStatic>
                                   <isFinal>false</isFinal>
@@ -2969,7 +2969,7 @@
                                   <type>void</type>
                                   <params>
                                     <net.java.amateras.uml.classdiagram.model.Argument>
-                                      <name>gameRoom</name>
+                                      <name>gameController</name>
                                       <type>GameRoom</type>
                                     </net.java.amateras.uml.classdiagram.model.Argument>
                                   </params>

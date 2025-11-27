@@ -14,7 +14,7 @@ public class ConnectionController extends Thread implements MessageSender {
     private Server server;
     private BufferedReader in;
     private PrintWriter out;
-    private GameRoom gameRoom;
+    private GameController gameController;
     private Player player;
 
 
@@ -41,14 +41,14 @@ public class ConnectionController extends Thread implements MessageSender {
         String msg;
             try {
                 while ((msg=in.readLine()) != null) {
-                    gameRoom.processMessage(this.player, msg);
+                    gameController.processMessage(this.player, msg);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println(player.getName()+"님의 연결이 종료되었습니다.");
             } finally {
-                if (gameRoom != null) {
-                    gameRoom.removePlayer(this.player);
+                if (gameController != null) {
+                    gameController.removePlayer(this.player);
                 }
                 if (socket != null) {
                     try {
@@ -67,9 +67,9 @@ public class ConnectionController extends Thread implements MessageSender {
     }
 
     //getter&setter
-    public void setGameRoom(GameRoom gameRoom) {
-        this.gameRoom = gameRoom;
-        this.gameRoom.addPlayer(player);
+    public void setGameRoom(GameController gameController) {
+        this.gameController = gameController;
+        this.gameController.addPlayer(player);
     }
     public Player getPlayer() {return player;}
     public void setPlayer(Player player) {this.player = player;}

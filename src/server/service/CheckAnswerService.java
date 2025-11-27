@@ -1,6 +1,6 @@
 package server.service;
 
-import server.controller.GameRoom;
+import server.controller.GameController;
 import server.domain.Player;
 
 import java.util.Map;
@@ -8,12 +8,12 @@ import java.util.Map;
 public class CheckAnswerService {
     private static final int SCORE_PER_ANSWER = 10;
 
-    public boolean correctAnswer(GameRoom gameRoom, Player player, String msg) {
-        String correctWord = gameRoom.getCurrentWord();
+    public boolean correctAnswer(GameController gameController, Player player, String msg) {
+        String correctWord = gameController.getCurrentWord();
 
         if (msg.equalsIgnoreCase(correctWord)) {
-            gameRoom.broadcastToRoom("[System] " + player.getName() + "님이 정답을 맞추셨습니다! (+" + SCORE_PER_ANSWER + "점)");
-            addScore(gameRoom, player);
+            gameController.broadcastToRoom("[System] " + player.getName() + "님이 정답을 맞추셨습니다! (+" + SCORE_PER_ANSWER + "점)");
+            addScore(gameController, player);
 
             return true;
         }
@@ -25,15 +25,15 @@ public class CheckAnswerService {
 
     }
 
-    public boolean compareWord (GameRoom gameRoom,String word) {
-        String correctWord = gameRoom.getCurrentWord();
+    public boolean compareWord (GameController gameController, String word) {
+        String correctWord = gameController.getCurrentWord();
         if(correctWord == null || word == null)
             return false;
         return word.equalsIgnoreCase(correctWord);
     }
 
-    public int getPlayerScore(GameRoom gameRoom, Player player) {
-        Integer score = gameRoom.getScoreBoard().get(player);
+    public int getPlayerScore(GameController gameController, Player player) {
+        Integer score = gameController.getScoreBoard().get(player);
         if (score == null) {
             return 0;
         }
@@ -41,8 +41,8 @@ public class CheckAnswerService {
 
     }
 
-    public void addScore(GameRoom gameRoom, Player player) {
-        Map<Player, Integer> board = gameRoom.getScoreBoard();
+    public void addScore(GameController gameController, Player player) {
+        Map<Player, Integer> board = gameController.getScoreBoard();
         Integer currentScore = board.get(player);
 
         if (currentScore == null)

@@ -5,7 +5,7 @@ import server.command.CommandFactory;
 import server.domain.Player;
 import server.service.GameService;
 
-public class GameRoom {
+public class GameController {
     private final List<Player> players = new ArrayList<>();
     private String currentWord;
     private Player drawer;
@@ -14,7 +14,7 @@ public class GameRoom {
     private final GameService gameService;
     private final CommandFactory commandFactory = CommandFactory.getInstance();
 
-    public GameRoom (GameService gameService) {
+    public GameController(GameService gameService) {
         this.gameService = gameService;
     }
 

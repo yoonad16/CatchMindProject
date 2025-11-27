@@ -1,6 +1,6 @@
 package server.command;
 
-import server.controller.GameRoom;
+import server.controller.GameController;
 import server.domain.Player;
 
 public class EraseCommand implements Command {
@@ -11,7 +11,7 @@ public class EraseCommand implements Command {
         this.data = data;
     }
     @Override
-    public void execute(GameRoom gameRoom, Player player) {
-        gameRoom.broadcastToRoom(this.data);
+    public void execute(GameController gameController, Player player) {
+        gameController.broadcastToRoom(this.data);
     }
 }

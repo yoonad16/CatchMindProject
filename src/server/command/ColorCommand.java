@@ -1,14 +1,14 @@
 package server.command;
 
-import server.controller.GameRoom;
+import server.controller.GameController;
 import server.domain.Player;
 
 public class ColorCommand implements Command {
     String message;
 
     @Override
-    public void execute(GameRoom gameRoom, Player player) {
-        gameRoom.broadcastToRoom(this.message);
+    public void execute(GameController gameController, Player player) {
+        gameController.broadcastToRoom(this.message);
     }
 
     @Override

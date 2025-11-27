@@ -1,6 +1,6 @@
 package server.command;
 
-import server.controller.GameRoom;
+import server.controller.GameController;
 import server.domain.Player;
 import server.service.GameService;
 
@@ -18,9 +18,9 @@ public class ChatCommand implements Command{
     }
 
     @Override
-    public void execute(GameRoom gameRoom, Player player) {
+    public void execute(GameController gameController, Player player) {
         String message = header + "[" + player.getName()+ "] " +data;
-        GameService gameService = gameRoom.getGameService();
-        gameService.checkAnswer(gameRoom, player, data);
+        GameService gameService = gameController.getGameService();
+        gameService.checkAnswer(gameController, player, data);
     }
 }
