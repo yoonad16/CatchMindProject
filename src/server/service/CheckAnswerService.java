@@ -20,11 +20,10 @@ public class CheckAnswerService {
         else {
             return false;
         }
-
-        // 점수 추가
-
     }
 
+
+    //일단 안 쓰는 메소드...인듯(후에 확정되면 삭제)
     public boolean compareWord (GameController gameController, String word) {
         String correctWord = gameController.getCurrentWord();
         if(correctWord == null || word == null)
