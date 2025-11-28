@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBConnector {
 
     private static final String DB_DRIVER_CLASS = "org.mariadb.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mariadb://192.168.74.1:3306/catchmind_words";
+    private static final String DB_URL = "jdbc:mariadb://192.168.74.1:3306/catchmind";
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "jungyuminee";
 
