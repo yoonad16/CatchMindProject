@@ -5,7 +5,7 @@ import server.command.CommandFactory;
 import server.domain.Player;
 import server.service.GameService;
 
-public class GameController {
+public class GameRoom {
     private final List<Player> players = new ArrayList<>();
     private String currentWord;
     private Player drawer;
@@ -15,7 +15,7 @@ public class GameController {
     private final GameService gameService;
     private final CommandFactory commandFactory = CommandFactory.getInstance();
 
-    public GameController(GameService gameService) {
+    public GameRoom(GameService gameService) {
         this.gameService = gameService;
     }
 
@@ -86,7 +86,7 @@ public class GameController {
                     // 시간 종료 시 다음 라운드로
                     gameTimer.cancel();
                     broadcastToRoom("[System] 시간이 종료되었습니다!");
-                    gameService.nextRound(GameController.this);
+                    gameService.nextRound(GameRoom.this);
                 }
             }
         }, 0, 1000); // 0초 후 시작, 1초마다 실행

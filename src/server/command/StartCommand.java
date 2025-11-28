@@ -1,6 +1,6 @@
 package server.command;
 
-import server.controller.GameController;
+import server.controller.GameRoom;
 import server.domain.Player;
 
 public class StartCommand implements Command {
@@ -8,9 +8,9 @@ public class StartCommand implements Command {
     String data;
 
     @Override
-    public void execute(GameController gameController, Player player) {
-        gameController.broadcastToRoom(data);
-        gameController.getGameService().startGame(gameController);
+    public void execute(GameRoom gameRoom, Player player) {
+        gameRoom.broadcastToRoom(data);
+        gameRoom.getGameService().startGame(gameRoom);
     }
 
     @Override

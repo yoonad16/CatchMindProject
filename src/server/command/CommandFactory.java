@@ -1,6 +1,6 @@
 package server.command;
 
-import server.controller.GameController;
+import server.controller.GameRoom;
 import server.domain.Player;
 
 import java.util.HashMap;
@@ -26,12 +26,11 @@ public class CommandFactory {
         return instance;
     }
 
-    public void createCommand(GameController gameController, String msg, Player player) {
+    public void createCommand(GameRoom gameRoom, String msg, Player player) {
         String[] tokens = msg.split(":");
 
         Command commandProcessor = commandMap.get(tokens[0]);
         commandProcessor.create(msg, player);
-        commandProcessor.execute(gameController, player);
+        commandProcessor.execute(gameRoom, player);
     }
-
 }

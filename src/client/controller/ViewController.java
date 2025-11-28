@@ -39,7 +39,6 @@ public class ViewController {
     public void updateTimer(int time) {
         mainFrame.updateTimer(time);
     }
-
     public void updateCurrentColor(String colorCode) {mainFrame.updateCurrentColor(colorCode);}
 
     //Setter

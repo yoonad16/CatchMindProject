@@ -1,7 +1,7 @@
 package server;
 
 import server.controller.ConnectionController;
-import server.controller.GameController;
+import server.controller.GameRoom;
 import server.service.CheckAnswerService;
 import server.service.DrawerService;
 import server.service.GameService;
@@ -17,8 +17,7 @@ import java.util.List;
 public class Server extends Thread{
 	
 	private ServerSocket serverSocket;
-    private final List<ConnectionController> clients = new ArrayList<>();
-    private final List<GameController> gameControllers = new ArrayList<>();
+    private final List<GameRoom> gameRooms = new ArrayList<>();
     private GameService gameService;
     private CheckAnswerService checkAnswerService;
     private DrawerService drawerService;
@@ -54,17 +53,16 @@ public class Server extends Thread{
     }
 
     public void addPlayer(Socket socket) {
-        GameController gameController = gameControllers.get(0);
+        GameRoom gameRoom = gameRooms.get(0);
 
         ConnectionController handler = new ConnectionController(socket, this);
-        handler.setGameRoom(gameController);
-        clients.add(handler);
+        handler.setGameRoom(gameRoom);
         handler.start();
     }
 
     public void makeGameRoom() {
-        GameController newGameController = new GameController(gameService);
-        this.gameControllers.add(newGameController);
+        GameRoom newGameRoom = new GameRoom(gameService);
+        this.gameRooms.add(newGameRoom);
     }
 
 }

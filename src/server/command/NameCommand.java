@@ -1,6 +1,6 @@
 package server.command;
 
-import server.controller.GameController;
+import server.controller.GameRoom;
 import server.domain.Player;
 
 public class NameCommand implements Command {
@@ -14,8 +14,8 @@ public class NameCommand implements Command {
     }
 
     @Override
-    public void execute(GameController gameController, Player player) {
+    public void execute(GameRoom gameRoom, Player player) {
         player.setName(this.data);
-        gameController.broadcastToRoom("CHAT:["+this.data+"]"+"님이 입장하셨습니다.");
+        gameRoom.broadcastToRoom("CHAT:["+this.data+"]"+"님이 입장하셨습니다.");
     }
 }

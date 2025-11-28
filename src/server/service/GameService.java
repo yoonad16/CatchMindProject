@@ -1,6 +1,6 @@
 package server.service;
 
-import server.controller.GameController;
+import server.controller.GameRoom;
 import server.domain.Player;
 import server.repository.QuizWordRepository;
 
@@ -20,12 +20,12 @@ public class GameService {
         this.quizWordRepository = quizWordRepository;
     }
 
-    public void startGame(GameController gameController) {
-        gameController.broadcastToRoom("[System] 게임이 시작되었습니다!");
-        nextRound(gameController);
+    public void startGame(GameRoom gameRoom) {
+        gameRoom.broadcastToRoom("[System] 게임이 시작되었습니다!");
+        nextRound(gameRoom);
     }
 
-    public void checkAnswer(GameController room, Player sender, String data) {
+    public void checkAnswer(GameRoom room, Player sender, String data) {
         String message = "CHAT:";
         if (checkAnswerService.correctAnswer(room, sender, data)) {
             nextRound(room);
@@ -34,8 +34,8 @@ public class GameService {
         room.broadcastToRoom(message);
     }
 
-    public int getPlayerScore(GameController gameController, Player player) {
-        Integer score = gameController.getScoreBoard().get(player);
+    public int getPlayerScore(GameRoom gameRoom, Player player) {
+        Integer score = gameRoom.getScoreBoard().get(player);
         if (score == null) {
             return 0;
         }
@@ -44,40 +44,40 @@ public class GameService {
     }
 
     // 다음 라운드 준비
-    public void nextRound(GameController gameController) {
-        gameController.stopTimer();
+    public void nextRound(GameRoom gameRoom) {
+        gameRoom.stopTimer();
         // 다음 그림 그리는 사람 선택
-        Player newDrawer = drawerService.selectNextDrawer(gameController.getPlayers(), gameController.getDrawer());
+        Player newDrawer = drawerService.selectNextDrawer(gameRoom.getPlayers(), gameRoom.getDrawer());
 
         if (newDrawer == null) {
-            gameController.broadcastToRoom("[System] 플레이어가 없어 게임을 진행할 수 없습니다.");
+            gameRoom.broadcastToRoom("[System] 플레이어가 없어 게임을 진행할 수 없습니다.");
             return;
         }
 
-        gameController.setDrawer(newDrawer);
-        gameController.broadcastToRoom("ERASE:");
+        gameRoom.setDrawer(newDrawer);
+        gameRoom.broadcastToRoom("ERASE:");
 
         // 사용자 업데이트
-        drawerService.updatePlayerStates(gameController, newDrawer);
+        drawerService.updatePlayerStates(gameRoom, newDrawer);
 
         // 제시어 변경
-        changeWord(gameController);
+        changeWord(gameRoom);
 
-        for (Player p : gameController.getPlayers()) {
-            if (!p.equals(gameController.getDrawer()))
+        for (Player p : gameRoom.getPlayers()) {
+            if (!p.equals(gameRoom.getDrawer()))
                 p.sendMessage("[System] 새로운 라운드가 시작되었습니다!");
         }
-        gameController.broadcastToRoom("다음 그림 그리는 사람은 "+newDrawer.getName()+"님 입니다.");
+        gameRoom.broadcastToRoom("다음 그림 그리는 사람은 "+newDrawer.getName()+"님 입니다.");
 
-        gameController.startTimer();
+        gameRoom.startTimer();
     }
 
-    public Player selectNextDrawer(GameController room) {
+    public Player selectNextDrawer(GameRoom room) {
         return drawerService.selectNextDrawer(room.getPlayers(), room.getDrawer());
     }
     // 제시어 바꾸기
-    private void changeWord(GameController gameController) {
-        String nextWord = gameWordService.changeWord(gameController, quizWordRepository);
-        gameController.setCurrentWord(nextWord);
+    private void changeWord(GameRoom gameRoom) {
+        String nextWord = gameWordService.changeWord(gameRoom, quizWordRepository);
+        gameRoom.setCurrentWord(nextWord);
     }
 }
