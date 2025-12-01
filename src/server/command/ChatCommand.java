@@ -19,9 +19,8 @@ public class ChatCommand implements Command{
     }
 
     @Override
-    public void execute(GameRoom gameRoom, ConnectionController player) {
-        String message = header + "[" + player.getName()+ "] " +data;
+    public void execute(GameRoom gameRoom, ConnectionController session) {
         GameService gameService = gameRoom.getGameService();
-        gameService.checkAnswer(gameRoom, player, data);
+        gameService.checkAnswer(gameRoom, session, data);
     }
 }

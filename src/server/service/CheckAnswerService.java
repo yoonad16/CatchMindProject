@@ -7,12 +7,12 @@ import server.domain.Player;
 public class CheckAnswerService {
     private static final int SCORE_PER_ANSWER = 10;
 
-    public boolean correctAnswer(GameRoom gameRoom, ConnectionController player, String msg) {
+    public boolean correctAnswer(GameRoom gameRoom, ConnectionController session, String msg) {
         String correctWord = gameRoom.getCurrentWord();
 
         if (msg.equalsIgnoreCase(correctWord)) {
-            gameRoom.broadcastToRoom("[System] " + player.getName() + "님이 정답을 맞추셨습니다! (+" + SCORE_PER_ANSWER + "점)");
-            addScore(gameRoom, player);
+            gameRoom.broadcastToRoom("[System] " + session.getPlayer().getName() + "님이 정답을 맞추셨습니다! (+" + SCORE_PER_ANSWER + "점)");
+            addScore(gameRoom, session);
 
             return true;
         }

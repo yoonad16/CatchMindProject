@@ -59,7 +59,7 @@ public class GameService {
         if (checkAnswerService.correctAnswer(room, sender, data)) {
             nextRound(room);
         }
-        message += "[" + sender.getName() + "] "+data;
+        message += "[" + sender.getPlayer().getName() + "] "+data;
         room.broadcastToRoom(message);
     }
 
