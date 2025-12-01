@@ -3,6 +3,8 @@ package server.controller;
 import server.MessageSender;
 import server.Server;
 import server.domain.Player;
+import server.repository.PlayerRepository;
+import server.service.PlayerService;
 
 import java.io.*;
 import java.net.*;
@@ -16,12 +18,14 @@ public class ConnectionController extends Thread implements MessageSender {
     private PrintWriter out;
     private GameRoom gameRoom;
     private Player player;
+    private PlayerService playerService;
 
 
     //생성자: 입출력 설정 | 플레이어 만들기 (컨트롤러랑 1:1 대응이라..?) + 플레이어 게임룸에 추가해주기
-    public ConnectionController(Socket socket, Server server) {
+    public ConnectionController(Socket socket, Server server, PlayerService playerService) {
         this.socket = socket;
         this.server = server;
+        this.playerService = playerService;
         try {
             InputStreamReader input = new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8);
             in = new BufferedReader(input);
@@ -40,15 +44,22 @@ public class ConnectionController extends Thread implements MessageSender {
     public void run() {
         String msg;
             try {
+                String name = in.readLine();
+                String[] tokens = name.split(":");
+                this.player = playerService.findPlayer(tokens[1]);
+
+                if (player == null) this.player = playerService.addNewPlayer(tokens[1]);
+                gameRoom.broadcastToRoom(this.player.getName()+"님이 입장하셨습니다.");
+
                 while ((msg=in.readLine()) != null) {
-                    gameRoom.processMessage(this.player, msg);
+                    gameRoom.processMessage(this, msg);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println(player.getName()+"님의 연결이 종료되었습니다.");
             } finally {
                 if (gameRoom != null) {
-                    gameRoom.removePlayer(this.player);
+                    gameRoom.removePlayer(this);
                 }
                 if (socket != null) {
                     try {
@@ -69,8 +80,19 @@ public class ConnectionController extends Thread implements MessageSender {
     //getter&setter
     public void setGameRoom(GameRoom gameRoom) {
         this.gameRoom = gameRoom;
-        this.gameRoom.addPlayer(player);
+        this.gameRoom.addPlayer(this);
     }
+
+    public void updatePlayerState(boolean win) {
+        int winTime = this.player.getWin();
+        if (win) winTime++;
+
+        this.player.setWin(winTime);
+        this.player.setPlayTime(this.player.getPlayTime()+1);
+
+        playerService.updatePlayerStatus(this.player);
+    }
+
     public Player getPlayer() {return player;}
     public void setPlayer(Player player) {this.player = player;}
 }

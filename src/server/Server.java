@@ -2,11 +2,9 @@ package server;
 
 import server.controller.ConnectionController;
 import server.controller.GameRoom;
-import server.service.CheckAnswerService;
-import server.service.DrawerService;
-import server.service.GameService;
+import server.repository.PlayerRepository;
+import server.service.*;
 import server.repository.QuizWordRepository;
-import server.service.GameWordService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -23,16 +21,22 @@ public class Server extends Thread{
     private DrawerService drawerService;
     private GameWordService gameWordService;
     private QuizWordRepository quizWordRepository;
+    private PlayerRepository playerRepository;
+    private PlayerService playerService;
+    private WinnerService winnerService;
 
     public Server(){
         this.quizWordRepository = new QuizWordRepository();
+        this.playerRepository = new PlayerRepository();
 
         this.checkAnswerService = new CheckAnswerService();
         this.drawerService = new DrawerService();
         this.gameWordService = new GameWordService();
+        this.winnerService = new WinnerService();
+        this.playerService = new PlayerService(this.playerRepository);
 
         this.gameService = new GameService(this.drawerService, this.gameWordService,
-                this.checkAnswerService, this.quizWordRepository);
+                this.checkAnswerService, this.winnerService, this.quizWordRepository);
     }
 
     public void run() {
@@ -55,7 +59,8 @@ public class Server extends Thread{
     public void addPlayer(Socket socket) {
         GameRoom gameRoom = gameRooms.get(0);
 
-        ConnectionController handler = new ConnectionController(socket, this);
+        ConnectionController handler = new ConnectionController(socket, this, this.playerService);
+        System.out.println("ConnectionController에 playerServcie 넣음");
         handler.setGameRoom(gameRoom);
         handler.start();
     }

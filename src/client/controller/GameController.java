@@ -22,15 +22,19 @@ public class GameController {
     }
 
     public void exitRoom() {
-        viewController.endPanel();
         System.out.println("서버와의 연결이 종료됩니다.");
+        client.send("DISCONNECT:");
+    }
+
+    public void endConnection() {
+        viewController.endPanel();
         client.disconnect();
         System.exit(0);
     }
 
-
     //메시지 수신(파싱)
     public void processMessage(String msg) {
+        if(msg.startsWith("DISCONNECT")) endConnection();
         commandFactory.createCommand(viewController,msg);
     }
 

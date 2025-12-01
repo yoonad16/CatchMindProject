@@ -1,6 +1,8 @@
 package client.controller;
 
 import client.ui.MainFrame;
+import client.ui.ResultPanel;
+
 import java.awt.*;
 
 //중계자: 클라이언트-UI 연결하고 중계
@@ -25,6 +27,11 @@ public class ViewController {
     }
     public void endPanel() {
         this.mainFrame.dispose();
+    }
+
+    public void printResult(String msg) {
+        endPanel();
+        new ResultPanel(msg);
     }
 
     //화면 업데이트

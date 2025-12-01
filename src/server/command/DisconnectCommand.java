@@ -2,18 +2,16 @@ package server.command;
 
 import server.controller.ConnectionController;
 import server.controller.GameRoom;
-import server.domain.Player;
 
-public class DrawCommand implements Command {
+public class DisconnectCommand implements Command {
     private String message;
-
     @Override
-    public void create(String data, ConnectionController player) {
-        this.message = data;
-    }
+    public void create(String data, ConnectionController player) {this.message = data;}
 
     @Override
     public void execute(GameRoom gameRoom, ConnectionController player) {
-       gameRoom.broadcastToRoom(this.message);
-    }
+        System.out.println("여기 디스커넷트");
+        gameRoom.removePlayer(player);}
+
+
 }

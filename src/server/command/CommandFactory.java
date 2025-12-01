@@ -1,5 +1,6 @@
 package server.command;
 
+import server.controller.ConnectionController;
 import server.controller.GameRoom;
 import server.domain.Player;
 
@@ -17,6 +18,7 @@ public class CommandFactory {
         commandMap.put("ERASE", new EraseCommand());
         commandMap.put("START", new StartCommand());
         commandMap.put("COLOR", new ColorCommand());
+        commandMap.put("DISCONNECT", new DisconnectCommand());
     }
 
     public static CommandFactory getInstance() {
@@ -26,7 +28,7 @@ public class CommandFactory {
         return instance;
     }
 
-    public void createCommand(GameRoom gameRoom, String msg, Player player) {
+    public void createCommand(GameRoom gameRoom, String msg, ConnectionController player) {
         String[] tokens = msg.split(":");
 
         Command commandProcessor = commandMap.get(tokens[0]);

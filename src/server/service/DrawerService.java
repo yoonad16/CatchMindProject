@@ -1,15 +1,17 @@
 package server.service;
 
+import server.controller.ConnectionController;
 import server.controller.GameRoom;
 import server.domain.AnsweringState;
 import server.domain.DrawingState;
 import server.domain.Player;
 
+import java.sql.Connection;
 import java.util.List;
 
 public class DrawerService {
 
-    public Player selectNextDrawer(List<Player> players, Player drawer) {
+    public ConnectionController selectNextDrawer(List<ConnectionController> players, ConnectionController drawer) {
         if (players.isEmpty()) {
             return null;
         }
@@ -26,18 +28,18 @@ public class DrawerService {
         return players.get((currentIndex + 1) % players.size());
     }
 
-    public void updatePlayerStates(GameRoom gameRoom, Player newDrawer) {
-        for(Player p: gameRoom.getPlayers()){
-            if(p.equals(newDrawer)) {
-                p.setState(new DrawingState());
+    public void updatePlayerStates(GameRoom gameRoom, ConnectionController newDrawer) {
+        for(ConnectionController c: gameRoom.getPlayers()){
+            if(c.equals(newDrawer)) {
+                c.getPlayer().setState(new DrawingState());
 
-                p.sendMessage("DRAWSTATE:true");
+                c.send("DRAWSTATE:true");
             } else {
-                p.setState(new AnsweringState());
+                c.getPlayer().setState(new AnsweringState());
 
-                p.sendMessage("DRAWSTATE:false");
+                c.send("DRAWSTATE:false");
 
-                p.sendMessage("KEYWORD:???");
+                c.send("KEYWORD:???");
 
             }
         }
