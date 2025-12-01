@@ -52,6 +52,7 @@ public class MainFrame extends JFrame {
     public void setGameController (GameController gameController) {
         canvasPanel.setGameController(gameController);
         gamePanel.setGameController(gameController);
+        chatPanel.setGameController(gameController);
     }
 
     public void enablePanel() {

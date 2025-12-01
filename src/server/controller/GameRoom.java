@@ -6,12 +6,11 @@ import server.domain.Player;
 import server.service.GameService;
 
 public class GameRoom {
-//    private final List<Player> players = new ArrayList<>();
     private final List<ConnectionController> players = new ArrayList<>();
     private String currentWord;
     private ConnectionController drawer;
     Timer gameTimer;
-    private int remainingTime = 10;
+    private int remainingTime = 30;
     private final GameService gameService;
     private final CommandFactory commandFactory = CommandFactory.getInstance();
     private int round;
@@ -85,7 +84,7 @@ public class GameRoom {
             gameTimer.cancel();
         }
 
-        remainingTime = 10;
+        remainingTime = 30;
         gameTimer = new Timer();
 
         gameTimer.scheduleAtFixedRate(new TimerTask() {
