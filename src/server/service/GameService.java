@@ -2,7 +2,6 @@ package server.service;
 
 import server.controller.ConnectionController;
 import server.controller.GameRoom;
-import server.domain.Player;
 import server.repository.QuizWordRepository;
 
 import java.util.List;
@@ -50,7 +49,7 @@ public class GameService {
             e.getKey().updatePlayerState(winner);
             winner = false;
         }
-        gameRoom.broadcastToRoom("CHAT:승자는 ["+scoreList.get(0).getKey().getName()+"] 입니다");
+        gameRoom.broadcastToRoom("CHAT:승자는 ["+scoreList.get(0).getKey().getPlayer().getName()+"] 입니다");
         System.out.println(result);
         gameRoom.broadcastToRoom(result);
     }
@@ -70,7 +69,7 @@ public class GameService {
         int round = gameRoom.getRound();
         gameRoom.setRound(++round);
 
-        if (round > gameRoom.getPlayers().size()){
+        if (round > gameRoom.getPlayers().size()*3){
             gameRoom.stopTimer();
             endGame(gameRoom);
             return;

@@ -32,8 +32,10 @@ public class GameRoom {
     }
     public void removePlayer(ConnectionController p) {
         if(players.size() <= 1) {
+            stopTimer();
             System.out.println("남은 인원 1명 이하임");
             gameService.endGame(this);
+            return;
         }
         else p.send("DISCONNECT:");
 

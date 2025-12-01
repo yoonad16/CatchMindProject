@@ -4,8 +4,6 @@ import server.controller.ConnectionController;
 import server.controller.GameRoom;
 import server.domain.Player;
 
-import java.util.Map;
-
 public class CheckAnswerService {
     private static final int SCORE_PER_ANSWER = 10;
 

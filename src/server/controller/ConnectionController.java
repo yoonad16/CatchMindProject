@@ -49,6 +49,8 @@ public class ConnectionController extends Thread implements MessageSender {
                 this.player = playerService.findPlayer(tokens[1]);
 
                 if (player == null) this.player = playerService.addNewPlayer(tokens[1]);
+
+                this.player.setScore(0);
                 gameRoom.broadcastToRoom(this.player.getName()+"님이 입장하셨습니다.");
 
                 while ((msg=in.readLine()) != null) {

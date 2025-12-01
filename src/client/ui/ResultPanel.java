@@ -10,11 +10,11 @@ public class ResultPanel extends JFrame {
         setSize(800,500);
         setLayout(new BorderLayout());
 
-        JTextArea result = new JTextArea();
+        JTextArea result = new JTextArea("결과\n");
+        result.setEditable(false);
 
-        for (int i=1; i<tokens.length; i++) {
-            result.append(tokens[i]);
-            result.append("\n");
+        for (String t : tokens) {
+            result.append(t+"\n");
         }
 
         add(result,BorderLayout.CENTER);
