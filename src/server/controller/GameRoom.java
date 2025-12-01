@@ -11,7 +11,7 @@ public class GameRoom {
     private String currentWord;
     private ConnectionController drawer;
     Timer gameTimer;
-    private int remainingTime = 30;
+    private int remainingTime = 10;
     private final GameService gameService;
     private final CommandFactory commandFactory = CommandFactory.getInstance();
     private int round;
@@ -54,10 +54,6 @@ public class GameRoom {
 
     }
 
-    public void updatePlayerStatus(List<Map.Entry<ConnectionController,Integer>> scoreList) {
-
-    }
-
     //메시지 처리 관련 로직
     //들어오는 메시지 1차 처리(각 서비스로 전달)
     public void processMessage (ConnectionController player, String msg) {
@@ -87,7 +83,7 @@ public class GameRoom {
             gameTimer.cancel();
         }
 
-        remainingTime = 30;
+        remainingTime = 10;
         gameTimer = new Timer();
 
         gameTimer.scheduleAtFixedRate(new TimerTask() {

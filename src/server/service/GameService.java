@@ -41,12 +41,12 @@ public class GameService {
         //check
         System.out.println("CHECKKK");
         for (Map.Entry<ConnectionController,Integer> e : scoreList) {
-            System.out.println(e.getKey().getName()+" "+e.getValue());
+            System.out.println(e.getKey().getPlayer().getName()+" "+e.getValue());
         }
 
         boolean winner = true;
         for (Map.Entry<ConnectionController, Integer> e : scoreList) {
-            result += e.getKey().getName()+" "+e.getValue()+":";
+            result += e.getKey().getPlayer().getName()+" "+e.getValue()+"점:";
             e.getKey().updatePlayerState(winner);
             winner = false;
         }
@@ -71,7 +71,9 @@ public class GameService {
         gameRoom.setRound(++round);
 
         if (round > gameRoom.getPlayers().size()){
+            gameRoom.stopTimer();
             endGame(gameRoom);
+            return;
         }
 
         // 다음 그림 그리는 사람 선택
