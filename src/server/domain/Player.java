@@ -31,14 +31,6 @@ public class Player {
     }
 
 
-//    public void sendMessage(String msg) {
-//        if (messageSender != null) {
-//            messageSender.send(msg);
-//        } else {
-//            System.err.println("[WARNING] " + name + "의 messageSender가 null입니다. 메시지 전송 실패: " + msg);
-//        }
-//    }
-
     //Getter & Setter
     public boolean canAnswer() {return this.state.canAnswer();}
     public boolean canDraw() {return this.state.canDraw();}
